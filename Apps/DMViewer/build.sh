@@ -25,4 +25,4 @@
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-bash $SCRIPTDIR/../../DMViewer/buildDist.sh
+bash $SCRIPTDIR/../../Library/buildDist.sh

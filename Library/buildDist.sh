@@ -54,7 +54,7 @@ cp $SCRIPTDIR/shaders/* $DISTDIR/shaders/
 #############################################
 ### DEPLOY DISTRIBUTION TO DEPENDENT APPS ###
 
-# copy all dependencies to dhlViewer project
+# copy all dependencies to DMViewer project
 DEPLOYDIR=$SCRIPTDIR/../Apps/DMViewer/lib
 mkdir -p $DEPLOYDIR
 cp -r $DISTDIR/* $DEPLOYDIR/
