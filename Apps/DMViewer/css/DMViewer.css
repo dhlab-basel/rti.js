@@ -1,0 +1,159 @@
+html, body
+{
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: small;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #202020;
+  color: #CCCCCC;
+}
+
+input, select, button, textarea {
+  background-color: inherit;
+  color: inherit;
+  margin-left: 5px;
+  border-color: #AAAAAA;
+  background-color: #000000;
+}
+
+input[type="text"]:focus, select:focus, button:focus {
+  outline: none;
+  box-shadow: 0 0 2px 2px #CCCCCC;
+}
+
+input[type="text"] {
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 2px;
+  background-color: #000000;
+  border-color: #000000;
+  margin-left: 2px;
+}
+
+
+input[type="radio"] {
+  display: inline-block;
+}
+
+button {
+  border-style: outset;
+  border-width: 1px;
+  border-radius: 5px;
+  background-color: #000000;
+  border-color: #AAAAAA;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+textarea {
+  margin-top: 2px;
+  border-color: #000000;
+  vertical-align: top;
+}
+
+ul {
+  list-style-type: none;
+}
+
+#viewerCont {
+  width: 77%;
+  height: 100%
+}
+
+#controlCont {
+  margin-top: 10px;
+  width: 22%;
+  height: 100%;
+}
+
+.dialog {
+  border-style: outset;
+  border-width: 1px;
+  border-radius: 5px;
+  border-color: #AAAAAA;
+  margin-left: 10px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.dialog li {
+  border: 1px solid #AAAAAA;
+  border-radius: 5px;
+  background-color: #000000;
+  padding: 2px;
+  padding-right: 4px;
+  margin-bottom: 4px;
+}
+
+.column {
+  vertical-align: top;
+  display: inline-block;
+}
+
+.section {
+  asdf margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.controlItem {
+  text-align: right;
+}
+
+.iconButton {
+  padding: 0px;
+  margin: 0;
+  border: 0 none;
+  background: none;
+}
+
+.iconImg{
+  width: 32px;
+  height: 32px;
+}
+
+.switchButtonOn {
+  background-color: #09ff00;
+  color: #000000;
+}
+
+.inactive {
+  color: #666666;
+}
+
+.currentAction {
+  color: #FFAA00;
+}
+
+.noDisplay {
+  display: none;
+ }
+
+ .hide {
+   display: none;
+}
+
+.clickable {
+   cursor: pointer;
+}
+
+.leftAlign {
+  text-align: left;
+  float: left;
+}
+
+.controlTitle {
+  font-size: medium;
+  text-align: left;
+}
+
+.bottomSeparator {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.clearFloat {
+  clear: both;
+}

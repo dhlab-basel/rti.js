@@ -1,0 +1,14 @@
+{ "configURL": "../resources/leaf_lowRes/info.json",
+  "imgURLPrefixes": ["../resources/leaf_lowRes/",
+    "../resources/leaf_lowRes/",
+    "../resources/leaf_lowRes/",
+    "../resources/leaf_lowRes/"],
+  "shaderReference": {
+    "fShaderURL": "lib/shaders/LRGB_PTM_FShader.glsl",
+    "vShaderURL": "lib/shaders/LRGB_PTM_VShader.glsl",
+    "utilsShaderURL": "lib/shaders/PTM_shaderUtils.glsl",
+    "supportedGeometries": [ "PLANE" ],
+    "description": "rti phong (no gloss) (plane)"
+   },
+  "description": "leaf low res test files"
+}

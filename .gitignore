@@ -1,0 +1,13 @@
+*.DS_Store
+*.idea
+*.pro.user
+build-*-Debug/
+build-*-Release/
+localData/
+Library/doc/
+Library/dist/
+Apps/DMViewer/doc/htmlDocumentation/
+Apps/DMViewer/lib/*
+!Apps/DMViewer/lib/README.md
+Apps/simpleViewer/lib/*
+!Apps/simpleViewer/lib/README.md

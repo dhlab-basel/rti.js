@@ -1,0 +1,27 @@
+{
+	"PTM":	{
+		"type":	"LRGB_PTM",
+		"contentSize":	{
+			"w":	2460,
+			"h":	1250
+		},
+		"scale":	[2, 2, 1, 1, 1, 2],
+		"bias":	[129, 140, 153, 104, 112, 0],
+		"orientation":	0,
+		"imageFormat":	"png",
+		"maxResolution":	{
+			"w":	4096,
+			"h":	4096
+		}
+	},
+	"Geometry":	{
+		"type":	"PLANE"
+	},
+	"MultiresStrategy":	{
+		"type":	"IIIF",
+		"tileSize":	{
+			"w":	256,
+			"h":	256
+		}
+	}
+}
