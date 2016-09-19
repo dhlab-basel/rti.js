@@ -1,0 +1,29 @@
+[
+  { "configURL": "../resources/leaf_lowRes/info.json",
+    "imgURLPrefixes": ["../resources/leaf_lowRes/",
+      "../resources/leaf_lowRes/",
+      "../resources/leaf_lowRes/",
+      "../resources/leaf_lowRes/"],
+    "shaderReference": {
+      "fShaderURL": "lib/shaders/LRGB_PTM_FShader.glsl",
+      "vShaderURL": "lib/shaders/LRGB_PTM_VShader.glsl",
+      "utilsShaderURL": "lib/shaders/PTM_shaderUtils.glsl",
+      "supportedGeometries": [ "PLANE" ],
+      "description": "rti phong (no gloss) (plane)"
+     },
+    "description": "leaf low res test files"
+  },
+  { "configURL": "../resources/leaf_lowRes_IIIF/info.json",
+    "imgURLPrefixes": ["http://192.168.0.1:1024/leaf_lowRes_IIIF/1_1.tif",
+      "http://192.168.0.1:1024/leaf_lowRes_IIIF/1_2.tif",
+      "http://192.168.0.1:1024/leaf_lowRes_IIIF/1_3.tif"],
+    "shaderReference": {
+      "fShaderURL": "lib/shaders/LRGB_PTM_FShader.glsl",
+      "vShaderURL": "lib/shaders/LRGB_PTM_VShader.glsl",
+      "utilsShaderURL": "lib/shaders/PTM_shaderUtils.glsl",
+      "supportedGeometries": [ "PLANE" ],
+      "description": "rti phong (no gloss) (plane)"
+     },
+    "description": "leaf low res IIIF test files"
+  }
+]
