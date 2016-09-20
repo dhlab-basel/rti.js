@@ -22,7 +22,7 @@
  * @class
  * @param {RTIViewer} viewer - The viewer to be controlled.
 */
-function InternalViewerController(viewer) {
+function RTIViewerController(viewer) {
   this._viewer = null;
   this._mouseMode = 0;
   this._isMouseDown = false;
@@ -30,9 +30,9 @@ function InternalViewerController(viewer) {
 
   this._init(viewer);
   return this;
-} // InternalViewerController
+} // RTIViewerController
 
-InternalViewerController.prototype = {
+RTIViewerController.prototype = {
   _init: function(viewer) {
     if (typeof(RTI_LIGHTCONTROL_IN_VIEWCONTAINER) == "undefined") {
       RTI_LIGHTCONTROL_IN_VIEWCONTAINER = true;
@@ -126,6 +126,5 @@ InternalViewerController.prototype = {
       lightDir.normalize();
     }
     this._viewer.setDirectionalLightDirection(lightDir)
-    // console.log(" lightDir ", lightDir.x, lightDir.y, lightDir.z);
   }
-} // InternalViewerController prototype
+} // RTIViewerController prototype
