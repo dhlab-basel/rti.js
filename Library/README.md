@@ -15,37 +15,25 @@ A JavaScript library enabling the rendering of PTMs in a web browser. Built with
 
 ## <a name="GetStarted"></a> Get Started ##
 
-### Building ###
-
-The build process requires a global install of *uglifyJS*. (Please follow instructions at [uglifyJS](https://github.com/mishoo/UglifyJS2) for installation.)
-
-
-For development purposes the JavaScript code is kept in multiple different src files (all located in Library/js/ and 3rd party libs in Library/lib/). For distribution purposes the sources are then bundled and minified into a single rti.min.js file. The distribution ready for use in 3rd party applications consists of this bundled .js file, together with all other dependencies (shader sources and three.min.js). The distribution has to be built initially and after all subsequent changes to the rti.js library sources by running the
-script *buildDist.sh*
-
-```bash
-$ bash buildDist.sh
-```
-
-The script will (re)build the rti.js library distribution from the current sources, and deploy the distribution to all dependent apps in this repository. You should be able to see the built files inside
-the directory Library/dist/
-
-If you do not get any errors here, you are ready to use the distribution in a 3rd party web application.
-
 
 ### Using the library ###
 
-Copy the contents of the distribution directory (Library/dist/) to your project, and include the two files *rti.min.js* and *three.min.js* in your JavaScript environment.
+On the master branch you can find an up-to-date build of the library (and all dependencies) in Library/dist/. (On all other branches you need to build the library yourself, see [Building](#Building).)
+
+Download or copy the contents of the distribution directory (Library/dist/ on master, or Library/build/ - after building - on all other branches) to your project folder.
 
 Additionally you should have some WebPTM data on your server. Specifically:
 
 - a WebPTM (a set of images together with a .json file, see [rti.js JSON Datatypes](#RTIJS_JSONDatatypes).)
-    You may find a example WebPTM in this repository under Apps/resources/papyrus_specTest_Tree_3/
+    You may find a example WebPTM in this repository under Apps/resources/leaf_lowRes/
 - a PTMReference (a .json file, see [rti.js JSON Datatypes](#RTIJS_JSONDatatypes), linking to your WebPTM data and the shader sources in the rti.js distribution.
 
 You should then be able to integrate the viewer into your HTML with the following code:
 
 ```HTML
+  <script src="lib/three.min.js"></script>
+  <script src="lib/rti.min.js"></script>
+
   <div id="viewerContainer" style="width: 500px; height: 500px;"></div>
   <script type="text/javascript">
 
@@ -61,15 +49,33 @@ You should then be able to integrate the viewer into your HTML with the followin
   </script>
 ```
 
-The viewer variable serves as your main interface to the rti.js API. You may call additional functions on it for e.g. changing the direction of the incoming light. Please refer to the documentation of the library (either directly in the sources, or via generated HTML documentation, see below) for more information.
+The viewer variable serves as your main interface to the rti.js API. You may call additional functions on it for e.g. changing the direction of the incoming light. Please refer to the documentation of the library (either directly in the sources, or via generated HTML documentation, see [Documentation](#Documentation)) for more information.
 
 You may also check out the projects under *Apps/* for real life examples on how to use the library for simple (*Apps/simpleViewer/*) or more advanced (*Apps/DMViewer/*) purposes.
+
+
+### <a name="Building"></a> Building ###
+
+The build process requires a global install of *uglifyJS*. (Please follow instructions at [uglifyJS](https://github.com/mishoo/UglifyJS2) for installation.)
+
+
+For development purposes the JavaScript code is kept in multiple different src files (all located in Library/js/ and 3rd party libs in Library/lib/). For distribution purposes the sources are then bundled and minified into a single rti.min.js file. The distribution ready for use in 3rd party applications consists of this bundled .js file, together with all other dependencies (shader sources and three.min.js). The distribution has to be built initially and after all subsequent changes to the rti.js library sources by running the
+script *build.sh*
+
+```bash
+$ bash build.sh
+```
+
+The script will (re)build the rti.js library distribution from the current sources, and deploy the distribution to all dependent apps in this repository. You should be able to see the built files inside
+the directory Library/build/
+
+If you do not get any errors here, you are ready to use the distribution in a 3rd party web application.
 
 
 ## <a name="RTIJS_JSONDatatypes"></a> rti.js JSON Datatypes ##
 
 The PTM data used as input for the rti.js viewer consists of a collection of images, together with a file called *info.json*, (or *info.xml*, see below) which holds metadata like PTM parameters and multiresolution configuration.
-The images, together with the .json file are the output of the DMMaker - see [DMMaker](DMMaker/README.md).
+The images, together with the .json file are the output of the DMMaker - see [WebRTIMaker](WebRTIMaker/README.md).
 
 For accessing the different parts of the data of a WebPTM, the rti.js viewer uses another JSON struct called *PTMReference*, which lists the URLs of the data together with a short description of the resource - see [PTMReference](#PTMReference).
 

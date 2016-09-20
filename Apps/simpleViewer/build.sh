@@ -18,11 +18,11 @@
 # Run this script with 'bash build.sh' to install or update the locally used distribution (in simpleViewer/lib/)
 # of the rti.js library.
 #
-# This script is just a convenient shortcut for launching the build script of the rti.js project.
+# This script is just a convenient shortcut for launching the build script of the rti.js library project.
 #
 # The invoked build script will rebuild the distribution of the rti.js library and deploy the
 # distribution to all dependent apps in this repository.
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-bash $SCRIPTDIR/../../Library/buildDist.sh
+bash $SCRIPTDIR/../../Library/build.sh

@@ -16,9 +16,9 @@
 #
 
 # This script builds the final product of the rti.js library project:
-# a directory 'dist' containing all dependencies for using the library in 3rd party applications.
+# a directory 'build' containing all dependencies for using the library in 3rd party applications.
 #
-# This script then also deploys the contents of this 'dist' folder to all the applications in this
+# This script then also deploys the contents of this 'build' folder to all the applications in this
 # repository which are dependent on the rti.js library.
 
 # get the path to the script, so we can execute it from anywhere
@@ -27,7 +27,7 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ##########################
 ### BUILD DISTRIBUTION ###
 
-DISTDIR=$SCRIPTDIR/dist
+DISTDIR=$SCRIPTDIR/build
 mkdir -p $DISTDIR
 
 # clear old contents of distribution
