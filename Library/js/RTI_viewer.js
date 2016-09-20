@@ -127,7 +127,7 @@ RTIViewer.prototype = {
     this._initSceneMesh(ptmReference);
     this._initialSettings = this.getSettings();
     this._requestTextures();
-    this._internalController = new InternalViewerController(this);
+    this._internalController = new RTIViewerController(this);
     this._rendering = false;
   },
 
