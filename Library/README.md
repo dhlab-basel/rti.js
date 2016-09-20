@@ -259,3 +259,5 @@ You can access the documentation in your browser by opening the index.html file 
 ## <a name="License"></a> License ##
 
 The rti.js library is available under the GNU Affero General Public License, see *license.txt*.
+
+three.js is available under the [MIT Licence](http://threejs.org/license).

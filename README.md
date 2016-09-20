@@ -47,3 +47,5 @@ This project was inspired by the *WebRTIViewer* project from [Visual Computing L
 The rti.js library, DMViewer and simpleViewer are available under the [GNU Affero General Public License](http://www.gnu.org/licenses/agpl-3.0.en.html).
 
 WebRTIMaker is available under the [GNU General Public Licence, version 3](http://www.gnu.org/licenses/).
+
+three.js is available under the [MIT Licence](http://threejs.org/license).
