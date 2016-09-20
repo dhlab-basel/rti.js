@@ -14,9 +14,9 @@
     "description": "leaf low res test files"
   },
   { "configURL": "../resources/leaf_lowRes_IIIF/info.json",
-    "imgURLPrefixes": ["http://192.168.0.1:1024/leaf_lowRes_IIIF/1_1.tif",
-      "http://192.168.0.1:1024/leaf_lowRes_IIIF/1_2.tif",
-      "http://192.168.0.1:1024/leaf_lowRes_IIIF/1_3.tif"],
+    "imgURLPrefixes": ["http://192.168.0.1:1024/leaf_lowRes_IIIF/1_1.png",
+      "http://192.168.0.1:1024/leaf_lowRes_IIIF/1_2.png",
+      "http://192.168.0.1:1024/leaf_lowRes_IIIF/1_3.png"],
     "shaderReference": {
       "fShaderURL": "lib/shaders/LRGB_PTM_FShader.glsl",
       "vShaderURL": "lib/shaders/LRGB_PTM_VShader.glsl",
