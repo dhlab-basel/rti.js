@@ -485,8 +485,24 @@ MultiresTree.prototype = {
  * geometry for a single tile.
  *
  * @class
- * @param {PTM} ptm - The PTM for which this multiresolution tree will be used.
+ * @param {PTM} ptm - The PTM for which the multiresolution tree will be used.
  * @param {int} numLayers - The number of textures a single tile holds.
+ *
+ * @property {int} index - index in the array of nodes
+ * @property {int} parentIndex - index to parent tile in the array of nodes
+ * @property {int[]} childrenIndices - indices o child tiles in the array of nodes
+ * @property {THREE.Vector3} position - position
+ * @property {THREE.Geometry} geometry - geometry
+ * @property {THREE.Material} material - material
+ * @property {THREE.Mesh} renderObject - rendered mesh object
+ * @property {THREE.Texture[]} textures - textures for each layer
+ * @property {bool} hasContent - indicates if tile is inside actual PTM content area
+ * @property {int} numLayers - number of texture layers
+ * @property {int} loadState - indicates progress texture loading
+ * @property {int} loadedLayersCount - number of texture layers where a response from the server has been received
+ * @property {bool} loadError - indicates if an error occured while loading textures
+ * @property {PTM} ptm - The PTM for which the multiresolution tree will be used.
+ * @property {string} imageRequestParams - IIIF request parameters for this tile
  */
 function MultiresTreeNode(ptm, numLayers) {
   this.index           = -1;
@@ -498,14 +514,13 @@ function MultiresTreeNode(ptm, numLayers) {
   this.renderObject    = null;
   this.textures        = [];
   this.hasContent = true;
+  this.numLayers = numLayers;
 
   this.loadState = 0;  // 0: init, 1: textures requested, 2: received reponses for all layers
   this.loadedLayersCount = 0;
   this.loadError = false;
 
   this.ptm = ptm; // TODO: get rid of ptm reference here
-
-  this.numLayers = numLayers;
 
   this.imageRequestParams = "";
 

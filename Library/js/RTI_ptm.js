@@ -22,18 +22,27 @@
  * @param {PTMReference} ptmReference - A PTMReference linking to the WebPTM
  *  data which should be rendered.
  *
- * @property {THREE.Vector3} kRGB - scaling factor (componentwise) color.
+ * @property {THREE.Vector3} kRGB - scaling factor color (componentwise).
  * @property {float} kd -  scaling factor diffuse term.
- * @property {float} ks - scaling factor specular term.
+ * @property {float} flatGSpecular - constant specularity.
+ * @property {float} ks - scaling factor LRGBG specularity map.
  * @property {float} alpha - exponent specular term.
+ * @property {int} gChannel - index for RGB-channel of specularity map.
+ * @property {float} scale - scaling factor LRGB coefficients.
+ * @property {float} bias - bias LRGB coefficients.
+ * @property {float} scaleSpecular - scaling factor LRGBG coefficients.
+ * @property {float} biasSpecular - bias LRGBG coefficients.
+ * @property {int} orientation - index rotation PTM display vs capturing.
+ * @property {THREE.Vector2} mirror - index mirror PTM display vs capturing.
+ * @property {int} debugMode - flag debugMode shader.
  *
  */
 function PTM(ptmReference) {
   this.kRGB = null;
   this.kd = 0;
+  this.flatGSpecular = 0;
   this.ks = 0;
   this.alpha = 0;
-  this.flatGSpecular = 0;
   this.gChannel = 0;
   this.scale = [];
   this.bias = [];
@@ -41,10 +50,7 @@ function PTM(ptmReference) {
   this.biasSpecular = [];
   this.orientation = 0;
   this.mirror = null;
-
   this.debugMode = 0;
-
-  this.description = "";
 
   this._ptmType = "";
   this._geometryType = "";

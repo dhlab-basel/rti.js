@@ -1,6 +1,6 @@
 # rti.js
 
-A set of tools for rendering and interacting with RTI/PTM data in a web browser. IIIF compliant, three.js - based and supporting multi-resolution.
+A set of tools for rendering and interacting with RTI/PTM data in a web browser. IIIF compliant, three.js-based and supporting multi-resolution.
 
 
 ## Overview ##
@@ -39,7 +39,7 @@ The main components are:
 
 ## Acknowledgements ##
 
-This project was inspired by the *WebRTIViewer* project from [Visual Computing Library  at ISTI](http://vcg.isti.cnr.it/rti/webviewer.php), and uses a similar data format for handling PTM data in a web environment.
+This project was inspired by the *WebRTIViewer* project from [Visual Computing Library  at ISTI](http://vcg.isti.cnr.it/rti/webviewer.php), and uses a similar data format and multi-resolution approach for handling PTM data in a web environment.
 
 
 ## License ##
