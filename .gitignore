@@ -6,7 +6,6 @@ build-*-Release/
 localData/
 Library/doc/
 Library/build/
-Library/dist/
 Apps/DMViewer/doc/htmlDocumentation/
 Apps/DMViewer/lib/*
 !Apps/DMViewer/lib/README.md

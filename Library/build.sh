@@ -63,3 +63,16 @@ cp -r $DISTDIR/* $DEPLOYDIR/
 DEPLOYDIR=$SCRIPTDIR/../Apps/simpleViewer/lib
 mkdir -p $DEPLOYDIR
 cp -r $DISTDIR/* $DEPLOYDIR/
+
+
+##########################################
+### !!!  !!!  ONLY ON MASTER  !!!  !!! ###
+### DEPLOY DISTRIBUTION TO DIST FOLDER ###
+
+# do NOT merge this part to other branches except master.
+# see rti.js/README.md 
+
+# copy all dependencies to Library/dist/ folder
+DEPLOYDIR=$SCRIPTDIR/dist
+mkdir -p $DEPLOYDIR
+cp -r $DISTDIR/* $DEPLOYDIR/
