@@ -1,15 +1,17 @@
 # simpleViewer #
 
-A small example application showing the minimal setup for integrating WebPTMs into a custom website by using the [rti.js](Library/README.md)
+A small example application showing the minimal setup for integrating WebPTMs into a custom website by using the [rti.js](../../Library/README.md)
  library.
 Built with HTML, JavaScript and rti.js.
 
 
 ## Get Started ##
 
+### Prerequisites ###
+
 This application uses the rti.js library.
 
-On the master branch an up-to-date pre-built version the rti.js library distribution is already deployed in the simpleViewer/lib/ directory. Developers using a version from the master branch may skip the build process explained below, and go directly to [Deployment](#Deployment).
+On the master branch an up-to-date pre-built version the rti.js library distribution is already deployed in the *simpleViewer/lib/* directory. Developers using a version from the master branch may skip the build process explained below, and go directly to [Deployment](#Deployment).
 
 On all other branches you need to build the rti.js library yourself, see [Building](#Building).
 
@@ -27,7 +29,7 @@ $ bash build.sh
 ```
 
 The script will (re)build the rti.js library distribution from the current sources, and deploy the distribution to all dependent apps in this repository. You should be able to see the deployed files inside
-the directory simpleViewer/lib/
+the directory *simpleViewer/lib/*
 
 If you do not get any errors here, you are ready to deploy the application on your server.
 

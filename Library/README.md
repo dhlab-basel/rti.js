@@ -18,14 +18,14 @@ A JavaScript library enabling the rendering of PTMs in a web browser. Built with
 
 ### Using the library ###
 
-On the master branch you can find an up-to-date build of the library (and all dependencies) in Library/dist/. (On all other branches you need to build the library yourself, see [Building](#Building).)
+On the master branch you can find an up-to-date build of the library (and all dependencies) in *Library/dist/*. (On all other branches you need to build the library yourself, see [Building](#Building).)
 
-Download or copy the contents of the distribution directory (Library/dist/ on master, or Library/build/ - after building - on all other branches) to your project folder.
+Download or copy the contents of the distribution directory (*Library/dist/* on master, or *Library/build/* - after building - on all other branches) to your project folder.
 
 Additionally you should have some WebPTM data on your server. Specifically:
 
 - a WebPTM (a set of images together with a .json file, see [rti.js JSON Datatypes](#RTIJS_JSONDatatypes).)
-    You may find a example WebPTM in this repository under Apps/resources/leaf_lowRes/
+    You may find a example WebPTM in this repository under *Apps/resources/leaf_lowRes/*
 - a PTMReference (a .json file, see [rti.js JSON Datatypes](#RTIJS_JSONDatatypes), linking to your WebPTM data and the shader sources in the rti.js distribution.
 
 You should then be able to integrate the viewer into your HTML with the following code:
@@ -59,7 +59,7 @@ You may also check out the projects under *Apps/* for real life examples on how 
 The build process requires a global install of *uglifyJS*. (Please follow instructions at [uglifyJS](https://github.com/mishoo/UglifyJS2) for installation.)
 
 
-For development purposes the JavaScript code is kept in multiple different src files (all located in Library/js/ and 3rd party libs in Library/lib/). For distribution purposes the sources are then bundled and minified into a single rti.min.js file. The distribution ready for use in 3rd party applications consists of this bundled .js file, together with all other dependencies (shader sources and three.min.js). The distribution has to be built initially and after all subsequent changes to the rti.js library sources by running the
+For development purposes the JavaScript code is kept in multiple different src files (all located in *Library/js/* and 3rd party libs in *Library/lib/*). For distribution purposes the sources are then bundled and minified into a single rti.min.js file. The distribution ready for use in 3rd party applications consists of this bundled .js file, together with all other dependencies (shader sources and three.min.js). The distribution has to be built initially and after all subsequent changes to the rti.js library sources by running the
 script *build.sh*
 
 ```bash
@@ -67,7 +67,7 @@ $ bash build.sh
 ```
 
 The script will (re)build the rti.js library distribution from the current sources, and deploy the distribution to all dependent apps in this repository. You should be able to see the built files inside
-the directory Library/build/
+the directory *Library/build/*
 
 If you do not get any errors here, you are ready to use the distribution in a 3rd party web application.
 
@@ -75,7 +75,7 @@ If you do not get any errors here, you are ready to use the distribution in a 3r
 ## <a name="RTIJS_JSONDatatypes"></a> rti.js JSON Datatypes ##
 
 The PTM data used as input for the rti.js viewer consists of a collection of images, together with a file called *info.json*, (or *info.xml*, see below) which holds metadata like PTM parameters and multiresolution configuration.
-The images, together with the .json file are the output of the DMMaker - see [WebRTIMaker](WebRTIMaker/README.md).
+The images, together with the .json file are the output of the WebRTIMaker - see [WebRTIMaker](WebRTIMaker/README.md).
 
 For accessing the different parts of the data of a WebPTM, the rti.js viewer uses another JSON struct called *PTMReference*, which lists the URLs of the data together with a short description of the resource - see [PTMReference](#PTMReference).
 
@@ -121,7 +121,7 @@ The semantics and syntax of the content is explained below:
     - `bias`: The bias parameters for the PTM coefficients. Must have 6 entries for type `LRGB_PTM`.
     - `orientation`: Encodes the rotation to be applied to mouse or light coordinates.
 
-        Some PTMs where not captured in the same orientation that they are displayed. The images provided by the server/DMMaker are already rotated to the desired orientation, while the coefficients in the image data still relate to the coord system of the capturing process.
+        Some PTMs where not captured in the same orientation that they are displayed. The images provided by the server/WebRTIMaker are already rotated to the desired orientation, while the coefficients in the image data still relate to the coord system of the capturing process.
 
         `0` for 0°, `1` for 90°,  `2` for 180°,  `3` for 270°, all CCW.
     - `imageFormat`: Describes the format of the images. `jpg` for .jpg, `png` for .png.
@@ -179,7 +179,7 @@ The client will append the generic parts of the URLs to the imgURLPrefixes. Depe
 
 ### info.xml ###
 
-The rti.js viewer is also able to read the metadata from a *info.xml* file. This enables (restricted) compatibility with the *WebMultires* format which was developed at ISTI. WebMultires info files do not support the `IIIF` MultiresStrategy,
+The rti.js viewer is also able to read the metadata from a *info.xml* file. This enables (restricted) compatibility with the *WebMultires* format which was developed at ISTI. WebMultires info files do not support the `IIIF` MultiresStrategy.
 
 Compared to the original *WebMultires* format the following restrictions apply: The rti.js viewer assumes all tiles to have no spatial offset, and to be in the default order (we ignore all lines after the 3rd line in the `Tree` tag).
 
@@ -234,7 +234,7 @@ The semantics and syntax of the content is explained below:
     Line 2: 'offset x', 'offset y', 'offset z' // relict from ISTI code, all entries not used in dhl code
 
 - Tag `Orientation`: Encodes the rotation to be applied to mouse or light coordinates.
-    Some PTMs where not captured in the same orientation that they are displayed. The images provided by the server/DMMaker are already rotated to the desired orientation, while the coefficients in the image data still relate to the coord system of the capturing process.
+    Some PTMs where not captured in the same orientation that they are displayed. The images provided by the server/WebRTIMaker are already rotated to the desired orientation, while the coefficients in the image data still relate to the coord system of the capturing process.
     0 for 0°, 1 for 90°, 2 for 180°, 3 for 270°, all CCW.
     Optional Tag, default value: 0
 
@@ -252,7 +252,7 @@ Then you may create the HTML documentation by running the following command (ass
 $ bash generateDocs.sh
 ```
 
-This will generate the HTML docs in the directory Library/doc/. (This particular directory is ignored by .git via the .gitignore file in this repository.)
+This will generate the HTML docs in the directory *Library/doc/*. (This particular directory is ignored by .git via the .gitignore file in this repository.)
 <br>Two stand-alone html documentations will be created:
 
 - Library/doc/htmlDocumentationAPI/ documentation of the public faced API
