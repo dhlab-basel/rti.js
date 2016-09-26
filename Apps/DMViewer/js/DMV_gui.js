@@ -538,7 +538,7 @@ DMViewerGUI.prototype = {
     }
   },
 
-  _onToggleShowButtonEvent(id) {
+  _onToggleShowButtonEvent: function(id) {
     document.getElementById(id+"Params").classList.toggle("hide");
     var button = document.getElementById(id+"ControlsButton");
     if (button.innerHTML == "+")
