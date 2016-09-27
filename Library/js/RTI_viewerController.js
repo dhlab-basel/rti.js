@@ -34,8 +34,12 @@ function RTIViewerController(viewer) {
 
 RTIViewerController.prototype = {
   _init: function(viewer) {
+    console.log("RTIViewerController._init:");
     if (typeof(RTI_LIGHTCONTROL_IN_VIEWCONTAINER) == "undefined") {
       RTI_LIGHTCONTROL_IN_VIEWCONTAINER = true;
+    }
+    if (typeof(RTI_LOCK_SCREENORIENTATION) == "undefined") {
+      RTI_LOCK_SCREENORIENTATION = "NO_LOCK";
     }
 
     this._viewer = viewer;
@@ -60,17 +64,18 @@ RTIViewerController.prototype = {
     this._viewer.getDomElement().addEventListener( 'keyup', this.onKeyUp.bind(this) );
     }
 
-    console.log("RTIViewerController._init:");
-    screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
-    if (screen.lockOrientationUniversal) {
-      // alert("screen.lockOrientation");
-      console.log(" has screen.lockOrientation");
-      screen.lockOrientationUniversal("landscape-primary");
-    }
-    if (screen.orientation.lock) {
-      // alert("has screen.orientation.lock");
-      console.log(" has screen.orientation.lock");
-      screen.orientation.lock("landscape-primary");
+    if (RTI_LOCK_SCREENORIENTATION != "NO_LOCK") {
+      screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
+      if (screen.lockOrientationUniversal) {
+        // alert("screen.lockOrientation");
+        console.log(" has screen.lockOrientation");
+        screen.lockOrientationUniversal("landscape-primary");
+      }
+      if (screen.orientation.lock) {
+        // alert("has screen.orientation.lock");
+        console.log(" has screen.orientation.lock");
+        screen.orientation.lock("landscape-primary");
+      }
     }
   },
 
