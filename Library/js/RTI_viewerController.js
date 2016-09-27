@@ -59,6 +59,19 @@ RTIViewerController.prototype = {
     this._viewer.getDomElement().focus();
     this._viewer.getDomElement().addEventListener( 'keyup', this.onKeyUp.bind(this) );
     }
+
+    console.log("RTIViewerController._init:");
+    screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
+    if (screen.lockOrientationUniversal) {
+      // alert("screen.lockOrientation");
+      console.log(" has screen.lockOrientation");
+      screen.lockOrientationUniversal("landscape-primary");
+    }
+    if (screen.orientation.lock) {
+      // alert("has screen.orientation.lock");
+      console.log(" has screen.orientation.lock");
+      screen.orientation.lock("landscape-primary");
+    }
   },
 
   onResize: function() {
