@@ -548,7 +548,7 @@ DMViewerGUI.prototype = {
   },
 
   _createLightDirControls: function(container) {
-    var lightDirDiv = this._createElement("div", "", "section");
+    var lightDirDiv = this._createElement("div", "lightDirCanvasDiv", "section");
     var canvas = this._createElement("canvas", "lightDirCanvas");
     canvas.width = 140;
     canvas.height = 140;
@@ -715,7 +715,7 @@ DMViewerGUI.prototype = {
 
   _createSaveSettingsDialog: function() {
     var settingsNameLabel = this._createLabel("labelSettingsNameInput", "", "Name: ", "settingsNameInput");
-    var settingsNameInput = this._createTextInput("settingsNameInput", "", "", 32, 30);
+    var settingsNameInput = this._createTextInput("settingsNameInput", "", "", 30, 30);
 
     var settingsDescrLabel = this._createLabel("labelSettingsDescrInput", "", "Description: ", "settingsDescrInput");
     var settingsDescrInput = this._createElement("textArea", "settingsDescrInput");
