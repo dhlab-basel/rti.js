@@ -77,6 +77,49 @@ RTIViewerController.prototype = {
         screen.orientation.lock("landscape-primary");
       }
     }
+
+    var self = this;
+
+    this._viewer.getDomElement().addEventListener('touchmove', function(event) {
+      // alert("touch move");
+      event.preventDefault();
+      if (event.targetTouches.length == 1) {
+        var touch = event.changedTouches[0];
+        if (self._isMouseDown) {
+          var newMousePos = RTIUtils.normalizedMouseCoords(touch, self._viewer.getDomElement());
+          if (self._mouseMode == 0) { // dragImage mode
+            self._viewer.dragView(self._lastMousePos, newMousePos);
+            self._lastMousePos = newMousePos;
+          } else if (self._mouseMode == 1) { // setLightDir mode
+            self.setLightDir(newMousePos);
+          }
+        }
+      }
+    }, false);
+
+    this._viewer.getDomElement().addEventListener('touchstart', function(event) {
+      // alert("touchstart");
+      event.preventDefault();
+      if (event.targetTouches.length == 1) {
+        var touch = event.changedTouches[0];
+        self._isMouseDown = true;
+        self._viewer.getDomElement().focus();
+        var newMousePos = RTIUtils.normalizedMouseCoords(touch, self._viewer.getDomElement());
+        if (self._mouseMode == 0) { // dragViewmage mode
+          self._lastMousePos = newMousePos;
+        } else if (self._mouseMode == 1) { // setLightDir mode
+          self.setLightDir(newMousePos);
+        }
+      }
+    }, false);
+
+    this._viewer.getDomElement().addEventListener('touchend', function(event) {
+      // alert("touchend");
+      event.preventDefault();
+      if (event.targetTouches.length == 1) {
+        self._isMouseDown = false;
+      }
+    }, false);
   },
 
   onResize: function() {
