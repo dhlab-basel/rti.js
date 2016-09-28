@@ -63,7 +63,8 @@ ul {
 
 #viewerCont {
   width: 77%;
-  height: 100%
+  height: 100%;
+  background-color: #000000;
 }
 
 #controlCont {
