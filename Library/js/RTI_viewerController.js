@@ -71,7 +71,7 @@ RTIViewerController.prototype = {
         console.log(" has screen.lockOrientation");
         screen.lockOrientationUniversal("landscape-primary");
       }
-      if (screen.orientation.lock) {
+      if (screen.orientation && screen.orientation.lock) {
         // alert("has screen.orientation.lock");
         console.log(" has screen.orientation.lock");
         screen.orientation.lock("landscape-primary");
