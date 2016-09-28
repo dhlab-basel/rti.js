@@ -81,10 +81,10 @@ RTIViewerController.prototype = {
     var self = this;
 
     this._viewer.getDomElement().addEventListener('touchmove', function(event) {
-      // alert("touch move");
       event.preventDefault();
       if (event.targetTouches.length == 1) {
         var touch = event.changedTouches[0];
+        self._isZoomActive = false;
         if (self._isMouseDown) {
           var newMousePos = RTIUtils.normalizedMouseCoords(touch, self._viewer.getDomElement());
           if (self._mouseMode == 0) { // dragImage mode
@@ -94,11 +94,25 @@ RTIViewerController.prototype = {
             self.setLightDir(newMousePos);
           }
         }
+      } else if (event.targetTouches.length == 2) {
+        var touch0 = event.changedTouches[0];
+        var touch1 = event.changedTouches[1];
+        this._isMouseDown = false;
+        var newMousePos0 = RTIUtils.normalizedMouseCoords(touch0, self._viewer.getDomElement());
+        var newMousePos1 = RTIUtils.normalizedMouseCoords(touch1, self._viewer.getDomElement());
+        var dPinchNew = Math.pow(newMousePos1.x - newMousePos0.x, 2) +  Math.pow(newMousePos1.y - newMousePos0.y, 2);
+        if (self._isZoomActive) {
+          var d = dPinchNew - self._dPinchLast;
+          self._viewer.zoomView(d, new THREE.Vector2(0,0));
+          self._dPinchLast = dPinchNew;
+        } else {
+          self._isZoomActive = true;
+          self._dPinchLast = dPinchNew;
+        }
       }
     }, false);
 
     this._viewer.getDomElement().addEventListener('touchstart', function(event) {
-      // alert("touchstart");
       event.preventDefault();
       if (event.targetTouches.length == 1) {
         var touch = event.changedTouches[0];
@@ -114,11 +128,9 @@ RTIViewerController.prototype = {
     }, false);
 
     this._viewer.getDomElement().addEventListener('touchend', function(event) {
-      // alert("touchend");
       event.preventDefault();
-      if (event.targetTouches.length == 1) {
-        self._isMouseDown = false;
-      }
+      self._isZoomActive = false;
+      self._isMouseDown = false;
     }, false);
   },
 
