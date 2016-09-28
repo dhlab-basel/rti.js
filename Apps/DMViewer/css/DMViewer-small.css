@@ -1,3 +1,7 @@
+body {
+  debug background-color: red;
+}
+
 input[type="text"] {
   margin-left: 0px;
 }
