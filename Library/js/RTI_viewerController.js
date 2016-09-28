@@ -78,60 +78,9 @@ RTIViewerController.prototype = {
       }
     }
 
-    var self = this;
-
-    this._viewer.getDomElement().addEventListener('touchmove', function(event) {
-      event.preventDefault();
-      if (event.targetTouches.length == 1) {
-        var touch = event.changedTouches[0];
-        self._isZoomActive = false;
-        if (self._isMouseDown) {
-          var newMousePos = RTIUtils.normalizedMouseCoords(touch, self._viewer.getDomElement());
-          if (self._mouseMode == 0) { // dragImage mode
-            self._viewer.dragView(self._lastMousePos, newMousePos);
-            self._lastMousePos = newMousePos;
-          } else if (self._mouseMode == 1) { // setLightDir mode
-            self.setLightDir(newMousePos);
-          }
-        }
-      } else if (event.targetTouches.length == 2) {
-        var touch0 = event.changedTouches[0];
-        var touch1 = event.changedTouches[1];
-        this._isMouseDown = false;
-        var newMousePos0 = RTIUtils.normalizedMouseCoords(touch0, self._viewer.getDomElement());
-        var newMousePos1 = RTIUtils.normalizedMouseCoords(touch1, self._viewer.getDomElement());
-        var dPinchNew = Math.pow(newMousePos1.x - newMousePos0.x, 2) +  Math.pow(newMousePos1.y - newMousePos0.y, 2);
-        if (self._isZoomActive) {
-          var d = dPinchNew - self._dPinchLast;
-          self._viewer.zoomView(d, new THREE.Vector2(0,0));
-          self._dPinchLast = dPinchNew;
-        } else {
-          self._isZoomActive = true;
-          self._dPinchLast = dPinchNew;
-        }
-      }
-    }, false);
-
-    this._viewer.getDomElement().addEventListener('touchstart', function(event) {
-      event.preventDefault();
-      if (event.targetTouches.length == 1) {
-        var touch = event.changedTouches[0];
-        self._isMouseDown = true;
-        self._viewer.getDomElement().focus();
-        var newMousePos = RTIUtils.normalizedMouseCoords(touch, self._viewer.getDomElement());
-        if (self._mouseMode == 0) { // dragViewmage mode
-          self._lastMousePos = newMousePos;
-        } else if (self._mouseMode == 1) { // setLightDir mode
-          self.setLightDir(newMousePos);
-        }
-      }
-    }, false);
-
-    this._viewer.getDomElement().addEventListener('touchend', function(event) {
-      event.preventDefault();
-      self._isZoomActive = false;
-      self._isMouseDown = false;
-    }, false);
+    this._viewer.getDomElement().addEventListener('touchstart', this.onTouchStart.bind(this) );
+    this._viewer.getDomElement().addEventListener('touchmove', this.onTouchMove.bind(this) );
+    this._viewer.getDomElement().addEventListener('touchend', this.onTouchEnd.bind(this) );
   },
 
   onResize: function() {
@@ -179,6 +128,59 @@ RTIViewerController.prototype = {
     event_info.preventDefault();
     var mousePos = RTIUtils.normalizedMouseCoords(event_info, this._viewer.getDomElement());
     this._viewer.zoomView(event_info.deltaY/40, mousePos); // MAGIC_VALUE
+  },
+
+  onTouchStart: function( event ) {
+    event.preventDefault();
+    if (event.targetTouches.length == 1) {
+      var touch = event.changedTouches[0];
+      this._isMouseDown = true;
+      this._viewer.getDomElement().focus();
+      var newMousePos = RTIUtils.normalizedMouseCoords(touch, this._viewer.getDomElement());
+      if (this._mouseMode == 0) { // dragViewmage mode
+        this._lastMousePos = newMousePos;
+      } else if (this._mouseMode == 1) { // setLightDir mode
+        this.setLightDir(newMousePos);
+      }
+    }
+  },
+
+  onTouchMove: function( event ) {
+    event.preventDefault();
+    if (event.targetTouches.length == 1) {
+      var touch = event.changedTouches[0];
+      this._isZoomActive = false;
+      if (this._isMouseDown) {
+        var newMousePos = RTIUtils.normalizedMouseCoords(touch, this._viewer.getDomElement());
+        if (this._mouseMode == 0) { // dragImage mode
+          this._viewer.dragView(this._lastMousePos, newMousePos);
+          this._lastMousePos = newMousePos;
+        } else if (this._mouseMode == 1) { // setLightDir mode
+          this.setLightDir(newMousePos);
+        }
+      }
+    } else if (event.targetTouches.length == 2) {
+      var touch0 = event.changedTouches[0];
+      var touch1 = event.changedTouches[1];
+      this._isMouseDown = false;
+      var newMousePos0 = RTIUtils.normalizedMouseCoords(touch0, this._viewer.getDomElement());
+      var newMousePos1 = RTIUtils.normalizedMouseCoords(touch1, this._viewer.getDomElement());
+      var dPinchNew = Math.pow(newMousePos1.x - newMousePos0.x, 2) +  Math.pow(newMousePos1.y - newMousePos0.y, 2);
+      if (this._isZoomActive) {
+        var d = dPinchNew - this._dPinchLast;
+        this._viewer.zoomView(d, new THREE.Vector2(0,0));
+        this._dPinchLast = dPinchNew;
+      } else {
+        this._isZoomActive = true;
+        this._dPinchLast = dPinchNew;
+      }
+    }
+  },
+
+  onTouchEnd: function( event ) {
+    event.preventDefault();
+    this._isZoomActive = false;
+    this._isMouseDown = false;
   },
 
   onKeyUp: function(event_info) {
