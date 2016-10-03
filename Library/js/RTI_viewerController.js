@@ -81,7 +81,7 @@ RTIViewerController.prototype = {
       this._isMouseDown = true;
       this._viewer.getDomElement().focus();
       var newMousePos = RTIUtils.normalizedMouseCoords(event_info, this._viewer.getDomElement());
-      if (this._mouseMode == 0) { // dragViewmage mode
+      if (this._mouseMode == 0) { // dragImage mode
         this._lastMousePos = newMousePos;
       } else if (this._mouseMode == 1) { // setLightDir mode
         this.setLightDir(newMousePos);

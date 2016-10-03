@@ -40,6 +40,7 @@ DMViewerController.prototype = {
     this.gui = gui;
 
     this._initPTM();
+    this.viewer.registerController(this);
     this.gui.registerController(this);
   },
 
@@ -331,6 +332,10 @@ DMViewerController.prototype = {
     } else {
       return [];
     }
+  },
+
+  notifyLightDirChange: function(direction) {
+    this.gui.updateLightDirDisplay(direction);
   },
 
   _setSettings: function(settings) {
