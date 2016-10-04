@@ -60,21 +60,13 @@ DMViewerGUI.prototype = {
     this._eventsConnected = false;
 
     this._createLightDirControls(container);
-
-    var mainSettingsDiv = this._createElement("div", "mainSettingsDiv", "section");
-    this._createSelector(mainSettingsDiv, "ptm", availablePTMs);
-    this._createSelector(mainSettingsDiv, "shader", availableShaders, !DMV_SHOW_ADVANCED_CONTROLS);
-    this._createSettingStorageElements(mainSettingsDiv);
-    mainSettingsDiv.appendChild(this._createElement("hr", "mainSettingsBottomSeparator", "bottomSeparator"));
-    container.appendChild(mainSettingsDiv);
-
+    this._createMainSettingsControls(container, availablePTMs, availableShaders);
     this._createLightColorControls(container, false, false);
     this._createPTMParamControls(container);
     this._createRadioForm(container, "Channel used for parameter 'g':", "gChannel", [ "1", "2", "3" ], !DMV_SHOW_ADVANCED_CONTROLS);
     this._createRadioForm(container, "Applied rotation (CCW):", "orientation", [ "0", "90", "180", "270" ], !DMV_SHOW_ADVANCED_CONTROLS);
     this._createDebugElements(container, !DMV_SHOW_ADVANCED_CONTROLS);
 
-    this.lightDirCanvas = document.getElementById("lightDirCanvas");
     this.updateLightDirDisplay(new THREE.Vector3(0,0,1));
 
     // the gui is now set up, but no events are connected yet. They will be connected when the controller calls registerController(DMViewerController).
@@ -249,7 +241,10 @@ DMViewerGUI.prototype = {
     var displayPosY = size*(reorientedLPosY+1)/2;
 
     ctx.clearRect(0,0,c.width,c.height);
-    ctx.strokeStyle = "#CCCCCC";
+    if (lightDir.z >= 0)
+      ctx.strokeStyle = "#CCCCCC";
+    else
+      ctx.strokeStyle = "#000000";
     ctx.beginPath();
     ctx.arc(center,center,center,0,2*Math.PI);
     ctx.stroke();
@@ -554,6 +549,16 @@ DMViewerGUI.prototype = {
     canvas.height = 140;
     lightDirDiv.appendChild(this._createElement("div").appendChild(canvas));
     container.appendChild(lightDirDiv);
+    this.lightDirCanvas = canvas;
+  },
+
+  _createMainSettingsControls: function(container, availablePTMs, availableShaders) {
+    var mainSettingsDiv = this._createElement("div", "mainSettingsDiv", "section");
+    this._createSelector(mainSettingsDiv, "ptm", availablePTMs);
+    this._createSelector(mainSettingsDiv, "shader", availableShaders, !DMV_SHOW_ADVANCED_CONTROLS);
+    this._createSettingStorageElements(mainSettingsDiv);
+    mainSettingsDiv.appendChild(this._createElement("hr", "mainSettingsBottomSeparator", "bottomSeparator"));
+    container.appendChild(mainSettingsDiv);
   },
 
   _createLightColorControls: function(container, hideAmbient, hideDirectional) {
