@@ -325,6 +325,10 @@ DMViewerController.prototype = {
     // console.log(" lightDir ", lightDir.x, lightDir.y, lightDir.z);
   },
 
+  onResize: function() {
+    this.viewer.resize();
+  },
+
   _getSettingsList: function() {
     if (RTIUtils.hasCookie("settingsList")) {
       var settingsList = JSON.parse(RTIUtils.getCookie("settingsList"));

@@ -75,6 +75,17 @@ ul {
   overflow-y: auto;
 }
 
+#hiddenControlCont {
+  padding: 0px;
+  margin: 0px;
+  float: right;
+  text-align: center;
+  width: 0%;
+  height: 0%;
+  background-color: black;
+  display: none;
+}
+
 #lightDirCanvasDiv {
   padding-top: 10px;
 }

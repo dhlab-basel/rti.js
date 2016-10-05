@@ -137,6 +137,9 @@ DMViewerGUI.prototype = {
     document.getElementById('kRGBControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "kRGB");
     document.getElementById('ambientControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "ambient");
     document.getElementById('directionalControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "directional");
+
+    document.getElementById('hideControlContButton').onclick = this._onHideControlContEvent.bind(this);
+    document.getElementById('showControlContButton').onclick = this._onShowControlContEvent.bind(this);
   },
 
   /**
@@ -542,8 +545,24 @@ DMViewerGUI.prototype = {
     button.innerHTML = "+";
   },
 
+  _onHideControlContEvent: function() {
+    var sheet = document.createElement('style')
+    sheet.innerHTML = "#viewerCont { width: 97%; height: 100%; } #controlCont { width: 0%; height: 0%; } #hiddenControlCont { width: 3%; height: 100%; display: block; }";
+    sheet.id = "hiddenControlContStyleSheet";
+    document.body.appendChild(sheet);
+    this.controller.onResize();
+  },
+
+  _onShowControlContEvent: function() {
+    var sheet = document.getElementById("hiddenControlContStyleSheet");
+    document.body.removeChild(sheet);
+    this.controller.onResize();
+  },
+
   _createLightDirControls: function(container) {
     var lightDirDiv = this._createElement("div", "lightDirCanvasDiv", "section");
+    lightDirDiv.appendChild(this._createButton("hideControlContButton", "leftAlign", "-"));
+    document.getElementById("hiddenControlCont").appendChild(this._createButton("showControlContButton", "", "+"));;
     var canvas = this._createElement("canvas", "lightDirCanvas");
     canvas.width = 140;
     canvas.height = 140;
