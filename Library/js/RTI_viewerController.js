@@ -50,6 +50,7 @@ RTIViewerController.prototype = {
 
     this._isMouseDown = false;
     this._lastMousePos = new THREE.Vector2();
+    this._dPinchLast = 0;
 
     window.addEventListener("resize", this.onResize.bind(this) );
     this._viewer.getDomElement().addEventListener( 'mousedown', this.onMouseDown.bind(this) );
@@ -67,34 +68,23 @@ RTIViewerController.prototype = {
     if (RTI_LOCK_SCREENORIENTATION != "NO_LOCK") {
       screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
       if (screen.lockOrientationUniversal) {
-        // alert("has screen.lockOrientation");
         console.log(" has screen.lockOrientation");
-        if (screen.lockOrientationUniversal("landscape-primary")) {
-          // alert("succ screen.lockOrientation");
-          console.log(" succ screen.lockOrientation");
+        if (screen.lockOrientationUniversal(RTI_LOCK_SCREENORIENTATION)) {
+          console.log(" success screen.lockOrientation");
         } else {
-          // alert("fail screen.lockOrientation");
           console.log(" fail screen.lockOrientation");
         }
       }
       if (screen.orientation && screen.orientation.lock) {
-        // alert("has screen.orientation.lock");
         console.log(" has screen.orientation.lock");
-        screen.orientation.lock("landscape-primary").then(
-          function(){
-            // alert("succ screen.orientation.lock");
-            console.log("succ screen.orientation.lock");
-          },
-          function(){
-            // alert("fail screen.orientation.lock");
-            console.log("fail screen.orientation.lock");
-          }
+        screen.orientation.lock(RTI_LOCK_SCREENORIENTATION).then(
+          function(){ console.log("RTIViewerController: success screen.orientation.lock"); },
+          function(){ console.log("RTIViewerController: fail screen.orientation.lock"); }
         );
       }
-      window.addEventListener('orientationchange', function () {
-        // alert("orientation change");
-        console.log("orientation change");
-      });
+      // window.addEventListener('orientationchange',
+      //   function () { console.log("orientation change"); }
+      // );
     }
 
     this._viewer.getDomElement().addEventListener('touchstart', this.onTouchStart.bind(this) );
