@@ -27,8 +27,8 @@
  * @param {DMViewerGUI} gui - The GUI which enables the user to control the viewer
  */
 function DMViewerController(viewer, gui) {
-  this.viewer = null;
-  this.gui = null;
+  this._viewer = null;
+  this._gui = null;
 
   this._init(viewer, gui);
   return this;
@@ -36,77 +36,77 @@ function DMViewerController(viewer, gui) {
 
 DMViewerController.prototype = {
   _init: function(viewer, gui) {
-    this.viewer = viewer;
-    this.gui = gui;
+    this._viewer = viewer;
+    this._gui = gui;
 
     this._initPTM();
-    this.viewer.registerController(this);
-    this.gui.registerController(this);
+    this._viewer.registerController(this);
+    this._gui.registerController(this);
   },
 
   _initPTM: function() {
     console.log("DMViewerController._init: initial vals:");
 
-    var orientation = this.viewer.ptm.orientation;
-    this.gui.updateExclusiveChoice("orientation", orientation);
+    var orientation = this._viewer.ptm.orientation;
+    this._gui.updateExclusiveChoice("orientation", orientation);
     console.log(" orientation "+ orientation);
 
-    if (this.viewer.ptm.getPTMType() == "LRGB_PTM") {
-      this.gui.showLRGBParams(false);
+    if (this._viewer.ptm.getPTMType() == "LRGB_PTM") {
+      this._gui.showLRGBParams(false);
     } else {
-      this.gui.showLRGBParams(true);
+      this._gui.showLRGBParams(true);
     }
 
-    var gChannel = this.viewer.ptm.gChannel;
-    this.gui.updateExclusiveChoice("gChannel", gChannel);
+    var gChannel = this._viewer.ptm.gChannel;
+    this._gui.updateExclusiveChoice("gChannel", gChannel);
     console.log(" gChannel "+ gChannel);
 
-    var alpha = this.viewer.ptm.alpha;
-    this.gui.updateRangeValue('Alpha', alpha);
+    var alpha = this._viewer.ptm.alpha;
+    this._gui.updateRangeValue('Alpha', alpha);
     console.log(" alpha "+ alpha);
 
-    var ks = this.viewer.ptm.ks;
-    this.gui.updateRangeValue('Ks', ks);
+    var ks = this._viewer.ptm.ks;
+    this._gui.updateRangeValue('Ks', ks);
     console.log(" ks "+ ks);
 
-    var gFlat = this.viewer.ptm.flatGSpecular;
-    this.gui.updateRangeValue('gFlat', gFlat);
+    var gFlat = this._viewer.ptm.flatGSpecular;
+    this._gui.updateRangeValue('gFlat', gFlat);
     console.log(" gFlat "+ gFlat);
 
-    var kd = this.viewer.ptm.kd;
-    this.gui.updateRangeValue('Kd', kd);
+    var kd = this._viewer.ptm.kd;
+    this._gui.updateRangeValue('Kd', kd);
     console.log(" kd "+ kd);
 
-    var kRGB = this.viewer.ptm.kRGB;
-    this.gui.updateRangeValue('KR', kRGB.x);
-    this.gui.updateRangeValue('KG', kRGB.y);
-    this.gui.updateRangeValue('KB', kRGB.z);
+    var kRGB = this._viewer.ptm.kRGB;
+    this._gui.updateRangeValue('KR', kRGB.x);
+    this._gui.updateRangeValue('KG', kRGB.y);
+    this._gui.updateRangeValue('KB', kRGB.z);
     console.log(" kRGB ", kRGB.x, kRGB.y, kRGB.z);
 
-    var ambiLightCol = this.viewer.getAmbientLightColor();
-    this.gui.updateRangeValue('R_ambient', ambiLightCol.x);
-    this.gui.updateRangeValue('G_ambient', ambiLightCol.y);
-    this.gui.updateRangeValue('B_ambient', ambiLightCol.z);
+    var ambiLightCol = this._viewer.getAmbientLightColor();
+    this._gui.updateRangeValue('R_ambient', ambiLightCol.x);
+    this._gui.updateRangeValue('G_ambient', ambiLightCol.y);
+    this._gui.updateRangeValue('B_ambient', ambiLightCol.z);
     console.log(" ambiLightCol ", ambiLightCol.x, ambiLightCol.y, ambiLightCol.z);
 
-    var dirLightCol = this.viewer.getDirectionalLightColor();
-    this.gui.updateRangeValue('R_directional', dirLightCol.x);
-    this.gui.updateRangeValue('G_directional', dirLightCol.y);
-    this.gui.updateRangeValue('B_directional', dirLightCol.z);
+    var dirLightCol = this._viewer.getDirectionalLightColor();
+    this._gui.updateRangeValue('R_directional', dirLightCol.x);
+    this._gui.updateRangeValue('G_directional', dirLightCol.y);
+    this._gui.updateRangeValue('B_directional', dirLightCol.z);
     console.log(" dirLightCol ", dirLightCol.x, dirLightCol.y, dirLightCol.z);
 
-    var lightDir = this.viewer.getLightDir();
-    this.gui.updateLightDirDisplay(lightDir);
+    var lightDir = this._viewer.getLightDir();
+    this._gui.updateLightDirDisplay(lightDir);
     console.log(" lightDir ", lightDir.x, lightDir.y, lightDir.z);
 
     var settingsList = this._getSettingsList();
-    this.gui.setSettingsList(settingsList);
+    this._gui.setSettingsList(settingsList);
 
-    var currentShaderDescr = this.viewer.getShader().description;
-    this.gui.setShader(currentShaderDescr);
+    var currentShaderDescr = this._viewer.getShader().description;
+    this._gui.setShader(currentShaderDescr);
     console.log(" shader " + currentShaderDescr);
 
-    this.gui.setDebugMode(this.viewer.ptm.debugMode);
+    this._gui.setDebugMode(this._viewer.ptm.debugMode);
   },
 
   /**
@@ -120,9 +120,9 @@ DMViewerController.prototype = {
     var range = this.getParameterRange(parameterId);
     if (value >= range.min && value <= range.max){
       this._changeValue(parameterId, value);
-      this.gui.updateRangeValue(parameterId, value);
+      this._gui.updateRangeValue(parameterId, value);
     } else {
-      this.gui.updateRangeValue(parameterId, this.getParameterValue(parameterId));
+      this._gui.updateRangeValue(parameterId, this.getParameterValue(parameterId));
     }
   },
 
@@ -133,7 +133,7 @@ DMViewerController.prototype = {
    * @param {integer} gChannel - The index of the requested channel (Allowed values: 0 | 1 | 2 ).
    */
   onGChannelChange: function(gChannel) {
-    this.viewer.ptm.gChannel = gChannel;
+    this._viewer.ptm.gChannel = gChannel;
   },
 
   /**
@@ -143,7 +143,7 @@ DMViewerController.prototype = {
    * @param {integer} gChannel - The index of the requested rotation (Allowed values: 0 | 1 | 2 | 3  encoding for rotations of 0 | 90 | 180 | 270 degrees CCW).
    */
   onRotationChange: function(orientation){
-    this.viewer.ptm.orientation = orientation;
+    this._viewer.ptm.orientation = orientation;
   },
 
   /**
@@ -153,11 +153,11 @@ DMViewerController.prototype = {
    * @param {PTMReference} ptmReference - A PTMReference linking to the WebPTM which should be rendered in the viewer.
    */
   onPTMChange: function(ptmReference){
-    if (this.viewer.loadPTM(ptmReference)){
-      this.gui.reportActionSuccess("changePTM", true);
+    if (this._viewer.loadPTM(ptmReference)){
+      this._gui.reportActionSuccess("changePTM", true);
       this._initPTM();
     } else {
-      this.gui.reportActionSuccess("changePTM", false);
+      this._gui.reportActionSuccess("changePTM", false);
     }
   },
 
@@ -168,8 +168,8 @@ DMViewerController.prototype = {
    * @param {ShaderReference} shaderReference - A ShaderReference linking to the shader which should be used in the viewer.
    */
   onShaderChange: function(shaderReference){
-    this.viewer.loadShader(shaderReference);
-    this.gui.setShader(this.viewer.getShader().description);
+    this._viewer.loadShader(shaderReference);
+    this._gui.setShader(this._viewer.getShader().description);
   },
 
   /**
@@ -187,17 +187,17 @@ DMViewerController.prototype = {
       var jsonList = JSON.stringify(settingsList);
       RTIUtils.setCookie("settingsList", jsonList, 30);
 
-      var currentSettings = this.viewer.getSettings();
+      var currentSettings = this._viewer.getSettings();
       currentSettings.name = name;
       currentSettings.description = description;
       var jsonSettings = JSON.stringify(currentSettings);
       RTIUtils.setCookie(name, jsonSettings, 30);
 
       settingsList = this._getSettingsList();
-      this.gui.reportActionSuccess("saveSettings", true);
-      this.gui.setSettingsList(settingsList);
+      this._gui.reportActionSuccess("saveSettings", true);
+      this._gui.setSettingsList(settingsList);
     } else {
-      this.gui.reportActionSuccess("saveSettings", false, "A setting with name: "+name+" already exists. Please choose another name.");
+      this._gui.reportActionSuccess("saveSettings", false, "A setting with name: "+name+" already exists. Please choose another name.");
     }
   },
 
@@ -212,9 +212,9 @@ DMViewerController.prototype = {
     if (RTIUtils.hasCookie(name)) {
       var settings = JSON.parse(RTIUtils.getCookie(name));
       this._setSettings(settings);
-      this.gui.reportActionSuccess("loadSettings", true);
+      this._gui.reportActionSuccess("loadSettings", true);
     } else {
-      this.gui.reportActionSuccess("loadSettings", false, "Could not load settings: "+name);
+      this._gui.reportActionSuccess("loadSettings", false, "Could not load settings: "+name);
     }
   },
 
@@ -223,7 +223,7 @@ DMViewerController.prototype = {
    * <p>Will reset the viewer settings in the viewer and update the gui accordingly.</p>
    */
   onResetSettingsAction: function() {
-    var settings = this.viewer.getInitialSettings();
+    var settings = this._viewer.getInitialSettings();
     this._setSettings(settings);
   },
 
@@ -232,12 +232,12 @@ DMViewerController.prototype = {
    * <p>Will toggle the debug mode and update the gui accordingly.</p>
    */
   onDebugToggle: function(){
-    if(this.viewer.ptm.debugMode == 0) {
-      this.viewer.ptm.debugMode  = 1;
+    if(this._viewer.ptm.debugMode == 0) {
+      this._viewer.ptm.debugMode  = 1;
     } else {
-      this.viewer.ptm.debugMode  = 0;
+      this._viewer.ptm.debugMode  = 0;
     }
-    this.gui.setDebugMode(this.viewer.ptm.debugMode);
+    this._gui.setDebugMode(this._viewer.ptm.debugMode);
   },
 
 
@@ -268,38 +268,38 @@ DMViewerController.prototype = {
  */
   getParameterValue: function(id) {
     if (id == "KRGB")
-    return this.viewer.ptm.kRGB;
+    return this._viewer.ptm.kRGB;
     else if (id == "KR" )
-    return this.viewer.ptm.kRGB.x;
+    return this._viewer.ptm.kRGB.x;
     else if ( id == "KG" )
-    return this.viewer.ptm.kRGB.y;
+    return this._viewer.ptm.kRGB.y;
     else if ( id == "KB")
-    return this.viewer.ptm.kRGB.z;
+    return this._viewer.ptm.kRGB.z;
 
     else if (id == "RGB_ambient")
-    return this.viewer.getAmbientLightColor();
+    return this._viewer.getAmbientLightColor();
     else if (id == "R_ambient" )
-    return this.viewer.getAmbientLightColor().x;
+    return this._viewer.getAmbientLightColor().x;
     else if ( id == "G_ambient" )
-    return this.viewer.getAmbientLightColor().y;
+    return this._viewer.getAmbientLightColor().y;
     else if ( id == "B_ambient")
-    return this.viewer.getAmbientLightColor().z;
+    return this._viewer.getAmbientLightColor().z;
 
     else if (id == "RGB_directional")
-    return this.viewer.getDirectionalLightColor();
+    return this._viewer.getDirectionalLightColor();
     else if (id == "R_directional" )
-    return this.viewer.getDirectionalLightColor().x;
+    return this._viewer.getDirectionalLightColor().x;
     else if ( id == "G_directional" )
-    return this.viewer.getDirectionalLightColor().y;
+    return this._viewer.getDirectionalLightColor().y;
     else if ( id == "B_directional")
-    return this.viewer.getDirectionalLightColor().z;
+    return this._viewer.getDirectionalLightColor().z;
 
     else if (id == "Kd" )
-    return this.viewer.ptm.kd;
+    return this._viewer.ptm.kd;
     else if ( id == "Ks")
-    return this.viewer.ptm.ks;
+    return this._viewer.ptm.ks;
     else if (id == "Alpha")
-    return this.viewer.ptm.alpha;
+    return this._viewer.ptm.alpha;
     else
     RTIError("received unknowm param id in DMViewerController.getParameterValue");
   },
@@ -320,13 +320,13 @@ DMViewerController.prototype = {
       lightDir.setZ(0.0);
       lightDir.normalize();
     }
-    this.viewer.setDirectionalLightDirection(lightDir)
-    this.gui.updateLightDirDisplay(lightDir);
+    this._viewer.setDirectionalLightDirection(lightDir)
+    this._gui.updateLightDirDisplay(lightDir);
     // console.log(" lightDir ", lightDir.x, lightDir.y, lightDir.z);
   },
 
   onResize: function() {
-    this.viewer.resize();
+    this._viewer.resize();
   },
 
   _getSettingsList: function() {
@@ -339,13 +339,13 @@ DMViewerController.prototype = {
   },
 
   notifyLightDirChange: function(direction) {
-    this.gui.updateLightDirDisplay(direction);
+    this._gui.updateLightDirDisplay(direction);
   },
 
   _setSettings: function(settings) {
     var lightDir = new THREE.Vector3(settings.lightDir.x, settings.lightDir.y, settings.lightDir.z);
-    this.viewer.setDirectionalLightDirection(lightDir)
-    this.gui.updateLightDirDisplay(lightDir);
+    this._viewer.setDirectionalLightDirection(lightDir)
+    this._gui.updateLightDirDisplay(lightDir);
 
     this.onRangeValueChange('KR', settings.kRGB.x);
     this.onRangeValueChange('KG', settings.kRGB.y);
@@ -355,13 +355,13 @@ DMViewerController.prototype = {
     this.onRangeValueChange('Alpha', settings.alpha);
     this.onRangeValueChange('gFlat', settings.flatGSpecular);
 
-    if (settings.PTMType == "LRGBG_PTM" && this.viewer.ptm.getPTMType() == "LRGBG_PTM") {
+    if (settings.PTMType == "LRGBG_PTM" && this._viewer.ptm.getPTMType() == "LRGBG_PTM") {
       this.onRangeValueChange('Ks', settings.ks);
-      this.viewer.ptm.gChannel = settings.gChannel;
-      this.gui.updateExclusiveChoice("gChannel", settings.gChannel);
+      this._viewer.ptm.gChannel = settings.gChannel;
+      this._gui.updateExclusiveChoice("gChannel", settings.gChannel);
     }
-    this.viewer.ptm.orientation = settings.orientation;
-    this.gui.updateExclusiveChoice("orientation", settings.orientation);
+    this._viewer.ptm.orientation = settings.orientation;
+    this._gui.updateExclusiveChoice("orientation", settings.orientation);
 
     this.onRangeValueChange('R_ambient', settings.ambientLightColor.x);
     this.onRangeValueChange('G_ambient', settings.ambientLightColor.y);
@@ -375,49 +375,49 @@ DMViewerController.prototype = {
   _changeValue: function(parameterId, value) {
     switch (parameterId){
       case "KR":
-      this.viewer.ptm.kRGB.setX(value);
+      this._viewer.ptm.kRGB.setX(value);
       break;
       case "KG":
-      this.viewer.ptm.kRGB.setY(value);
+      this._viewer.ptm.kRGB.setY(value);
       break;
       case "KB":
-      this.viewer.ptm.kRGB.setZ(value);
+      this._viewer.ptm.kRGB.setZ(value);
       break;
       case "Kd":
-      this.viewer.ptm.kd = value;
+      this._viewer.ptm.kd = value;
       break;
       case "Ks":
-      this.viewer.ptm.ks = value;
+      this._viewer.ptm.ks = value;
       break;
       case "Alpha":
-      this.viewer.ptm.alpha = value;
+      this._viewer.ptm.alpha = value;
       break;
       case "gFlat":
-      this.viewer.ptm.flatGSpecular = value;
+      this._viewer.ptm.flatGSpecular = value;
       break;
       case "R_ambient":
-      var color = this.viewer.getAmbientLightColor().setX(value);
-      this.viewer.setAmbientLightColor(color);
+      var color = this._viewer.getAmbientLightColor().setX(value);
+      this._viewer.setAmbientLightColor(color);
       break;
       case "G_ambient":
-      var color = this.viewer.getAmbientLightColor().setY(value);
-      this.viewer.setAmbientLightColor(color);
+      var color = this._viewer.getAmbientLightColor().setY(value);
+      this._viewer.setAmbientLightColor(color);
       break;
       case "B_ambient":
-      var color = this.viewer.getAmbientLightColor().setZ(value);
-      this.viewer.setAmbientLightColor(color);
+      var color = this._viewer.getAmbientLightColor().setZ(value);
+      this._viewer.setAmbientLightColor(color);
       break;
       case "R_directional":
-      var color = this.viewer.getDirectionalLightColor().setX(value);
-      this.viewer.setDirectionalLightColor(color);
+      var color = this._viewer.getDirectionalLightColor().setX(value);
+      this._viewer.setDirectionalLightColor(color);
       break;
       case "G_directional":
-      var color = this.viewer.getDirectionalLightColor().setY(value);
-      this.viewer.setDirectionalLightColor(color);
+      var color = this._viewer.getDirectionalLightColor().setY(value);
+      this._viewer.setDirectionalLightColor(color);
       break;
       case "B_directional":
-      var color = this.viewer.getDirectionalLightColor().setZ(value);
-      this.viewer.setDirectionalLightColor(color);
+      var color = this._viewer.getDirectionalLightColor().setZ(value);
+      this._viewer.setDirectionalLightColor(color);
       break;
       default:
       console.log("ERROR: unidentified parameterId: " +parameterId + " in DMViewerController.js: _changeValue()");

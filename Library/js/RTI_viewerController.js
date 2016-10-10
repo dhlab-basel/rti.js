@@ -27,6 +27,7 @@ function RTIViewerController(viewer) {
   this._mouseMode = 0;
   this._isMouseDown = false;
   this._lastMousePos = null;
+  this._dPinchLast = 0;
 
   this._init(viewer);
   return this;
