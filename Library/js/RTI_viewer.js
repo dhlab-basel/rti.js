@@ -161,7 +161,7 @@ RTIViewer.prototype = {
     this._scene.add(this.ptm.renderObject);
     this._initSceneMesh(ptmReference);
 
-    this.setDirectionalLightDirection(new THREE.Vector3(0.0, 0.0, 0.1));
+    this.setDirectionalLightDirection(new THREE.Vector3(0.0, 0.0, 1.0));
     this.setDirectionalLightColor(new THREE.Vector3(  1.5, 1.5, 1.5 ));
     this.setAmbientLightColor(new THREE.Vector3(0.0, 0.0, 0.0));
 
