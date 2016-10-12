@@ -300,6 +300,8 @@ DMViewerController.prototype = {
     return this._viewer.ptm.ks;
     else if (id == "Alpha")
     return this._viewer.ptm.alpha;
+    else if (id == "gFlat")
+    return this._viewer.ptm.flatGSpecular;
     else
     RTIError("received unknowm param id in DMViewerController.getParameterValue");
   },

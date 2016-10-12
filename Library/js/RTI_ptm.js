@@ -100,11 +100,12 @@ PTM.prototype = {
     this.debugMode = 0;
     this.kRGB = new THREE.Vector3( 1, 1, 1 );
     this.kd = 0.4;
-    this.ks = 0.7;
+    this.ks = 0.0;
     this.alpha = 75;
     this.flatGSpecular = 0;
 
     if (this._ptmType == "LRGBG_PTM") {
+      this.ks = 0.7;
       this.gChannel = 2;
     }
 

@@ -475,9 +475,22 @@ DMViewerGUI.prototype = {
     if (value > 0) {
       element.checked = true;
       element.value = "on";
+      if (parameterId == 'Ks' || parameterId == 'gFlat') {
+        document.getElementById("sliderAlpha").value = this._lastAlpha;
+        document.getElementById("displayAlpha").value = this._lastAlpha;
+        document.getElementById("labelAlpha").classList.remove("inactive");
+      }
     } else {
       element.checked = false;
       element.value = "off";
+      if (parameterId == 'Ks' || parameterId == 'gFlat') {
+        if (this._getSlider("Ks").value == 0 && this._getSlider("gFlat").value == 0) {
+          this._lastAlpha = document.getElementById("sliderAlpha").value;
+          document.getElementById("sliderAlpha").value = 0;
+          document.getElementById("displayAlpha").value = "";
+          document.getElementById("labelAlpha").classList.add("inactive");
+        }
+      }
     }
   },
 
