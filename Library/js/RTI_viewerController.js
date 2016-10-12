@@ -39,9 +39,6 @@ RTIViewerController.prototype = {
     if (typeof(RTI_LIGHTCONTROL_IN_VIEWCONTAINER) == "undefined") {
       RTI_LIGHTCONTROL_IN_VIEWCONTAINER = true;
     }
-    if (typeof(RTI_LOCK_SCREENORIENTATION) == "undefined") {
-      RTI_LOCK_SCREENORIENTATION = "NO_LOCK";
-    }
 
     this._viewer = viewer;
     if (RTI_LIGHTCONTROL_IN_VIEWCONTAINER)
@@ -64,28 +61,6 @@ RTIViewerController.prototype = {
     this._viewer.getDomElement().setAttribute("tabindex", -1);
     this._viewer.getDomElement().focus();
     this._viewer.getDomElement().addEventListener( 'keyup', this.onKeyUp.bind(this) );
-    }
-
-    if (RTI_LOCK_SCREENORIENTATION != "NO_LOCK") {
-      screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
-      if (screen.lockOrientationUniversal) {
-        console.log(" has screen.lockOrientation");
-        if (screen.lockOrientationUniversal(RTI_LOCK_SCREENORIENTATION)) {
-          console.log(" success screen.lockOrientation");
-        } else {
-          console.log(" fail screen.lockOrientation");
-        }
-      }
-      if (screen.orientation && screen.orientation.lock) {
-        console.log(" has screen.orientation.lock");
-        screen.orientation.lock(RTI_LOCK_SCREENORIENTATION).then(
-          function(){ console.log("RTIViewerController: success screen.orientation.lock"); },
-          function(){ console.log("RTIViewerController: fail screen.orientation.lock"); }
-        );
-      }
-      // window.addEventListener('orientationchange',
-      //   function () { console.log("orientation change"); }
-      // );
     }
 
     this._viewer.getDomElement().addEventListener('touchstart', this.onTouchStart.bind(this) );

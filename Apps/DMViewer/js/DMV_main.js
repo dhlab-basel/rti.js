@@ -17,7 +17,6 @@
 /** @ignore */
 RTI_SHOW_BSPHERES = false;
 RTI_LIGHTCONTROL_IN_VIEWCONTAINER = false;
-RTI_LOCK_SCREENORIENTATION = "landscape-primary";
 
 function initDMViewer() {
 
