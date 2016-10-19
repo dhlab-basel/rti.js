@@ -49,3 +49,5 @@ The rti.js library, DMViewer and simpleViewer are available under the [GNU Affer
 WebRTIMaker is available under the [GNU General Public Licence, version 3](http://www.gnu.org/licenses/).
 
 three.js is available under the [MIT Licence](http://threejs.org/license).
+
+![dhlabLogo](Img/dhlab-dark-s.png)        ![unibasLogo](Img/UniBas_Logo_EN_Schwarz_RGB_55.jpg)
