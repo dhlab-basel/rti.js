@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<!--
+* Copyright © 2016 Aeneas Kaiser, Andrea Bianco.
+* This file is part of rti.js.
+* rti.js is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published
+* by the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* rti.js is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Affero General Public License for more details.
+* You should have received a copy of the GNU Affero General Public
+* License along with rti.js. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>motionTest</title>
+
+  <link type="text/css" href="css/motionTest.css" rel="Stylesheet">
+
+  <script src="../../Library/js/RTI_utils.js"></script>
+  <script src="js/motionTest.js"></script>
+
+</head>
+
+<body onload="initMotionTest()">
+
+  <div id="debugCont"> - </div>
+  <div id="debugCont1"> - </div>
+  <div id="debugCont2"> - </div>
+  <div id="debugCont3"> - </div>
+  <div id="debugCont4"> - </div>
+  <br>
+  <div id="bufferSizeCont"> - </div>
+  <br>
+  <div id="motionTestCont">
+    <div id="deviceMotion">
+      deviceMotion browser support: <span class="rightAlign" id="deviceMotionSupport"> - </span>
+      <ul>
+      	<li>acceleration incl g x: <span class="rightAlign" id="accelerationInclGBufferX"> - </span> <span class="rightAlign" id="accelerationInclGX"> - </span> m/s^2</li>
+      	<li>acceleration incl g y: <span class="rightAlign" id="accelerationInclGBufferY"> - </span> <span class="rightAlign" id="accelerationInclGY"> - </span> m/s^2</li>
+      	<li>acceleration incl gz: <span class="rightAlign" id="accelerationInclGBufferZ"> - </span> <span class="rightAlign" id="accelerationInclGZ"> - </span> m/s^2</li>
+        <br>
+        <li>acceleration x: <span class="rightAlign" id="accelerationX"> - </span> m/s^2</li>
+      	<li>acceleration y: <span class="rightAlign" id="accelerationY"> - </span> m/s^2</li>
+      	<li>acceleration z: <span class="rightAlign" id="accelerationZ"> - </span> m/s^2</li>
+        <br>
+      	<li>rotation alpha: <span class="rightAlign" id="rotationRateAlpha"> - </span> deg/s</li>
+      	<li>rotation beta: <span class="rightAlign" id="rotationRateBeta"> - </span> deg/s</li>
+      	<li>rotation gamma: <span class="rightAlign" id="rotationRateGamma"> - </span> deg/s</li>
+        <br>
+        <li>interval: <span class="rightAlign" id="motionInterval"> - </span> ms</li>
+        <li>interval est: <span class="rightAlign" id="motionIntervalEst"> - </span> ms</li>
+      </ul>
+    </div>
+    <div id="deviceOrientation">
+      deviceOrientation browser support: <span class="rightAlign" id="deviceOrientationSupport"> - </span>
+      <ul>
+        <li>orientation absolute: <span class="rightAlign" id="orientationAbsolute"> - </span> </li>
+        <br>
+        <li>orientation alpha:  <span class="rightAlign" id="orientationBufferAlpha"> - </span> <span class="rightAlign" id="orientationAlpha"> - </span> deg</li>
+        <li>orientation beta: <span class="rightAlign" id="orientationBufferBeta"> - </span> <span class="rightAlign" id="orientationBeta"> - </span> deg</li>
+        <li>orientation gamma: <span class="rightAlign" id="orientationBufferGamma"> - </span> <span class="rightAlign" id="orientationGamma"> - </span> deg</li>
+        <br>
+        <li>interval est: <span class="rightAlign" id="orientationIntervalEst"> - </span> ms</li>
+      </ul>
+    </div>
+
+    <div id="compassNeedsCalibration">
+      compassNeedsCalibration browser support: <span class="rightAlign" id="compassNeedsCalibrationSupport"> - </span>
+    </div>
+    <br>
+
+    <div id="screenOrientation">
+      screen orientation:
+      <ul>
+      <li>window.orientation: <span class="rightAlign" id="screenOrientationAttributeCont"></span></li>
+      <li>screen.orientation: <span class="rightAlign" id="screenOrientationScreenAttributeCont"></span></li>
+      <li>window.matchMedia: <span class="rightAlign" id="screenOrientationMatchMediaCont"></span></li>
+    </ul>
+    </div>
+
+    <br>
+
+    <div id="userAgentCont"></div>
+
+  </div>
+  <div id="viewerCont"></div>
+
+</body>
+</html>

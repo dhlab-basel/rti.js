@@ -138,6 +138,9 @@ DMViewerGUI.prototype = {
     document.getElementById('ambientControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "ambient");
     document.getElementById('directionalControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "directional");
 
+    document.getElementById('toggleOrientationControl').onclick = this._onToggleOrientationControlEvent.bind(this);
+    document.getElementById('toggleOrientationAmplify').onclick = this._onToggleOrientationAmplifyEvent.bind(this);
+
     document.getElementById('hideControlContButton').onclick = this._onHideControlContEvent.bind(this);
     document.getElementById('showControlContButton').onclick = this._onShowControlContEvent.bind(this);
   },
@@ -290,6 +293,13 @@ DMViewerGUI.prototype = {
     }
   },
 
+  showOrientationToggle: function(show) {
+    if (show)
+      document.getElementById("orientationControlDiv").classList.remove("hide");
+    else
+      document.getElementById("orientationControlDiv").classList.add("hide");
+  },
+
   _getSelector: function(parameterId) {
     return document.getElementById(parameterId+"Selector");
   },
@@ -370,6 +380,30 @@ DMViewerGUI.prototype = {
       this.controller.onRangeValueChange(parameterId, range.min);
     } else {
       this.controller.onRangeValueChange(parameterId, (range.min+range.max)/2);
+    }
+  },
+
+  _onToggleOrientationControlEvent: function() {
+    var toggle = document.getElementById('toggleOrientationControl');
+    if (toggle.value == "on") {
+      this.controller.onEnableOrientationControl(false);
+      toggle.value = "off";
+      document.getElementById("labelOrientationAmplify").classList.add("inactive");
+    } else {
+      this.controller.onEnableOrientationControl(true);
+      toggle.value = "on";
+      document.getElementById("labelOrientationAmplify").classList.remove("inactive");
+    }
+  },
+
+  _onToggleOrientationAmplifyEvent: function() {
+    var toggle = document.getElementById('toggleOrientationAmplify');
+    if (toggle.value == "on") {
+      this.controller.onEnableOrientationAmplify(false);
+      toggle.value = "off";
+    } else {
+      this.controller.onEnableOrientationAmplify(true);
+      toggle.value = "on";
     }
   },
 
@@ -580,6 +614,21 @@ DMViewerGUI.prototype = {
     canvas.width = 140;
     canvas.height = 140;
     lightDirDiv.appendChild(this._createElement("div").appendChild(canvas));
+    var orientationControlDiv = this._createElement("div", "orientationControlDiv", "section");
+    var label = this._createLabel("labelOrientationControl", "", "disable motion control ", "toggleOrientationControl");
+    var toggle = this._createInput("checkbox", "toggleOrientationControl", "", "on");
+    toggle.name = "toggleOrientationControl";
+    toggle.checked = true;
+    orientationControlDiv.appendChild(toggle);
+    orientationControlDiv.appendChild(label);
+    orientationControlDiv.appendChild(this._createElement("br"));
+    var labelAmplify = this._createLabel("labelOrientationAmplify", "", "amplify motion angles ", "toggleOrientationAmplify");
+    var toggleAmplify = this._createInput("checkbox", "toggleOrientationAmplify", "", "off");
+    toggleAmplify.name = "toggleOrientationAmplify";
+    toggleAmplify.checked = false;
+    orientationControlDiv.appendChild(toggleAmplify);
+    orientationControlDiv.appendChild(labelAmplify);
+    lightDirDiv.appendChild(orientationControlDiv);
     container.appendChild(lightDirDiv);
     this.lightDirCanvas = canvas;
   },

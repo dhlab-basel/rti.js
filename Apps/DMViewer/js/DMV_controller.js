@@ -29,6 +29,8 @@
 function DMViewerController(viewer, gui) {
   this._viewer = null;
   this._gui = null;
+  this._deviceOrientationCalls = 0;
+  this._lastDeviceOrientationCall = 0;
 
   this._init(viewer, gui);
   return this;
@@ -38,10 +40,13 @@ DMViewerController.prototype = {
   _init: function(viewer, gui) {
     this._viewer = viewer;
     this._gui = gui;
+    this._deviceOrientationCalls = 0;
+    this._lastDeviceOrientationCall = 0;
 
     this._initPTM();
     this._viewer.registerController(this);
     this._gui.registerController(this);
+    this._testOrientationControlSupport();
   },
 
   _initPTM: function() {
@@ -240,6 +245,13 @@ DMViewerController.prototype = {
     this._gui.setDebugMode(this._viewer.ptm.debugMode);
   },
 
+  onEnableOrientationControl: function(enable) {
+    this._viewer.enableOrientationControl(enable);
+  },
+
+  onEnableOrientationAmplify: function(enable) {
+   this._viewer.enableOrientationAmplify(enable);
+  },
 
 /**
  * Returns the range of allowed values for the parameter with parameterId 'id'.
@@ -331,6 +343,29 @@ DMViewerController.prototype = {
     this._viewer.resize();
   },
 
+  notifyLightDirChange: function(direction) {
+    this._gui.updateLightDirDisplay(direction);
+  },
+
+  _testOrientationControlSupport: function() {
+    this._gui.showOrientationToggle(false);
+    this._deviceOrientationCalls = 0;
+    this._lastDeviceOrientationCall = Date.now();
+    var self = this;
+    var adaptToOrientationControlSupport = function() {
+        self._deviceOrientationCalls++;
+        var now = Date.now();
+        if (now-self._lastDeviceOrientationCall < 500 && self._deviceOrientationCalls > 1) {
+          self._gui.showOrientationToggle(true);
+          window.removeEventListener('deviceorientation', adaptToOrientationControlSupport );
+        }
+        self._lastDeviceOrientationCall = now;
+    };
+    if (window.DeviceOrientationEvent != null) {
+      window.addEventListener('deviceorientation', adaptToOrientationControlSupport);
+    }
+  },
+
   _getSettingsList: function() {
     if (RTIUtils.hasCookie("settingsList")) {
       var settingsList = JSON.parse(RTIUtils.getCookie("settingsList"));
@@ -338,10 +373,6 @@ DMViewerController.prototype = {
     } else {
       return [];
     }
-  },
-
-  notifyLightDirChange: function(direction) {
-    this._gui.updateLightDirDisplay(direction);
   },
 
   _setSettings: function(settings) {
