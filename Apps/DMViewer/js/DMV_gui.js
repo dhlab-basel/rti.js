@@ -66,6 +66,7 @@ DMViewerGUI.prototype = {
     this._createRadioForm(container, "Channel used for parameter 'g':", "gChannel", [ "1", "2", "3" ], !DMV_SHOW_ADVANCED_CONTROLS);
     this._createRadioForm(container, "Applied rotation (CCW):", "orientation", [ "0", "90", "180", "270" ], !DMV_SHOW_ADVANCED_CONTROLS);
     this._createDebugElements(container, !DMV_SHOW_ADVANCED_CONTROLS);
+    this._createLogoSection(container);
 
     this.updateLightDirDisplay(new THREE.Vector3(0,0,1));
 
@@ -838,9 +839,27 @@ DMViewerGUI.prototype = {
     var button = this._createButton("debugModeButton", "", "Debug");
     div.appendChild(button);
     if (hidden)
-    div.classList.add("noDisplay");
+      div.classList.add("noDisplay");
+    div.appendChild(this._createElement("hr", "debugElementsBottomSeparator", "bottomSeparator"));
     container.appendChild(div);
   },
+
+ _createLogoSection: function(container) {
+   var div = this._createElement("div", "", "section");
+   var textDiv = this._createElement("div", "", "centerText");
+   textDiv.appendChild(document.createTextNode("© Digital Humanities Lab, University of Basel."));
+
+   var linkDHLab = this._createElement("a", "", "");
+   linkDHLab.href = "http://dhlab.unibas.ch";
+   linkDHLab.target="_blank";
+   var logoDHLab = this._createElement("img", "logoDHLab", "logo");
+   logoDHLab.src = "res/dhlab-dark-s.png";
+   linkDHLab.appendChild(logoDHLab);
+
+   div.appendChild(textDiv);
+   div.appendChild(linkDHLab);
+   container.appendChild(div);
+ },
 
   _createElement: function(tag, id, className) {
     var elem = document.createElement(tag);

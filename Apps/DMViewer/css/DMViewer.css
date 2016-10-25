@@ -180,3 +180,15 @@ ul {
 .clearFloat {
   clear: both;
 }
+
+.logo {
+  margin-top: 10px;
+  margin-right: 25%;
+  background-color: grey;
+  width: 50%;
+}
+
+.centerText {
+  margin-top: 30px;
+  text-align: center;
+}
