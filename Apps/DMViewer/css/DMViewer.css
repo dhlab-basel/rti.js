@@ -1,3 +1,8 @@
+html
+{
+overflow: hidden;
+}
+
 html, body
 {
   font-family: Helvetica, Arial, sans-serif;
@@ -15,6 +20,7 @@ input, select, button, textarea {
   margin-left: 5px;
   border-color: #AAAAAA;
   background-color: #000000;
+  max-width:100%;
 }
 
 input[type="text"]:focus, select:focus, button:focus {
@@ -30,7 +36,6 @@ input[type="text"] {
   border-color: #000000;
   margin-left: 2px;
 }
-
 
 input[type="radio"] {
   display: inline-block;
@@ -58,13 +63,31 @@ ul {
 
 #viewerCont {
   width: 77%;
-  height: 100%
+  height: 100%;
+  background-color: #000000;
 }
 
 #controlCont {
-  margin-top: 10px;
+  padding-right: 2px;
+  float: right;
   width: 22%;
   height: 100%;
+  overflow-y: auto;
+}
+
+#hiddenControlCont {
+  padding: 0px;
+  margin: 0px;
+  float: right;
+  text-align: center;
+  width: 0%;
+  height: 0%;
+  background-color: black;
+  display: none;
+}
+
+#lightDirCanvasDiv {
+  padding-top: 10px;
 }
 
 .dialog {

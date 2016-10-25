@@ -60,21 +60,13 @@ DMViewerGUI.prototype = {
     this._eventsConnected = false;
 
     this._createLightDirControls(container);
-
-    var mainSettingsDiv = this._createElement("div", "mainSettingsDiv", "section");
-    this._createSelector(mainSettingsDiv, "ptm", availablePTMs);
-    this._createSelector(mainSettingsDiv, "shader", availableShaders, !DMV_SHOW_ADVANCED_CONTROLS);
-    this._createSettingStorageElements(mainSettingsDiv);
-    mainSettingsDiv.appendChild(this._createElement("hr", "mainSettingsBottomSeparator", "bottomSeparator"));
-    container.appendChild(mainSettingsDiv);
-
+    this._createMainSettingsControls(container, availablePTMs, availableShaders);
     this._createLightColorControls(container, false, false);
     this._createPTMParamControls(container);
     this._createRadioForm(container, "Channel used for parameter 'g':", "gChannel", [ "1", "2", "3" ], !DMV_SHOW_ADVANCED_CONTROLS);
     this._createRadioForm(container, "Applied rotation (CCW):", "orientation", [ "0", "90", "180", "270" ], !DMV_SHOW_ADVANCED_CONTROLS);
     this._createDebugElements(container, !DMV_SHOW_ADVANCED_CONTROLS);
 
-    this.lightDirCanvas = document.getElementById("lightDirCanvas");
     this.updateLightDirDisplay(new THREE.Vector3(0,0,1));
 
     // the gui is now set up, but no events are connected yet. They will be connected when the controller calls registerController(DMViewerController).
@@ -145,6 +137,9 @@ DMViewerGUI.prototype = {
     document.getElementById('kRGBControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "kRGB");
     document.getElementById('ambientControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "ambient");
     document.getElementById('directionalControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "directional");
+
+    document.getElementById('hideControlContButton').onclick = this._onHideControlContEvent.bind(this);
+    document.getElementById('showControlContButton').onclick = this._onShowControlContEvent.bind(this);
   },
 
   /**
@@ -249,7 +244,10 @@ DMViewerGUI.prototype = {
     var displayPosY = size*(reorientedLPosY+1)/2;
 
     ctx.clearRect(0,0,c.width,c.height);
-    ctx.strokeStyle = "#CCCCCC";
+    if (lightDir.z >= 0)
+      ctx.strokeStyle = "#CCCCCC";
+    else
+      ctx.strokeStyle = "#000000";
     ctx.beginPath();
     ctx.arc(center,center,center,0,2*Math.PI);
     ctx.stroke();
@@ -477,9 +475,22 @@ DMViewerGUI.prototype = {
     if (value > 0) {
       element.checked = true;
       element.value = "on";
+      if (parameterId == 'Ks' || parameterId == 'gFlat') {
+        document.getElementById("sliderAlpha").value = this._lastAlpha;
+        document.getElementById("displayAlpha").value = this._lastAlpha;
+        document.getElementById("labelAlpha").classList.remove("inactive");
+      }
     } else {
       element.checked = false;
       element.value = "off";
+      if (parameterId == 'Ks' || parameterId == 'gFlat') {
+        if (this._getSlider("Ks").value == 0 && this._getSlider("gFlat").value == 0) {
+          this._lastAlpha = document.getElementById("sliderAlpha").value;
+          document.getElementById("sliderAlpha").value = 0;
+          document.getElementById("displayAlpha").value = "";
+          document.getElementById("labelAlpha").classList.add("inactive");
+        }
+      }
     }
   },
 
@@ -538,7 +549,7 @@ DMViewerGUI.prototype = {
     }
   },
 
-  _onToggleShowButtonEvent(id) {
+  _onToggleShowButtonEvent: function(id) {
     document.getElementById(id+"Params").classList.toggle("hide");
     var button = document.getElementById(id+"ControlsButton");
     if (button.innerHTML == "+")
@@ -547,13 +558,39 @@ DMViewerGUI.prototype = {
     button.innerHTML = "+";
   },
 
+  _onHideControlContEvent: function() {
+    var sheet = document.createElement('style')
+    sheet.innerHTML = "#viewerCont { width: 97%; height: 100%; } #controlCont { width: 0%; height: 0%; } #hiddenControlCont { width: 3%; height: 100%; display: block; }";
+    sheet.id = "hiddenControlContStyleSheet";
+    document.body.appendChild(sheet);
+    this.controller.onResize();
+  },
+
+  _onShowControlContEvent: function() {
+    var sheet = document.getElementById("hiddenControlContStyleSheet");
+    document.body.removeChild(sheet);
+    this.controller.onResize();
+  },
+
   _createLightDirControls: function(container) {
-    var lightDirDiv = this._createElement("div", "", "section");
+    var lightDirDiv = this._createElement("div", "lightDirCanvasDiv", "section");
+    lightDirDiv.appendChild(this._createButton("hideControlContButton", "leftAlign", "-"));
+    document.getElementById("hiddenControlCont").appendChild(this._createButton("showControlContButton", "", "+"));;
     var canvas = this._createElement("canvas", "lightDirCanvas");
     canvas.width = 140;
     canvas.height = 140;
     lightDirDiv.appendChild(this._createElement("div").appendChild(canvas));
     container.appendChild(lightDirDiv);
+    this.lightDirCanvas = canvas;
+  },
+
+  _createMainSettingsControls: function(container, availablePTMs, availableShaders) {
+    var mainSettingsDiv = this._createElement("div", "mainSettingsDiv", "section");
+    this._createSelector(mainSettingsDiv, "ptm", availablePTMs);
+    this._createSelector(mainSettingsDiv, "shader", availableShaders, !DMV_SHOW_ADVANCED_CONTROLS);
+    this._createSettingStorageElements(mainSettingsDiv);
+    mainSettingsDiv.appendChild(this._createElement("hr", "mainSettingsBottomSeparator", "bottomSeparator"));
+    container.appendChild(mainSettingsDiv);
   },
 
   _createLightColorControls: function(container, hideAmbient, hideDirectional) {
@@ -715,7 +752,7 @@ DMViewerGUI.prototype = {
 
   _createSaveSettingsDialog: function() {
     var settingsNameLabel = this._createLabel("labelSettingsNameInput", "", "Name: ", "settingsNameInput");
-    var settingsNameInput = this._createTextInput("settingsNameInput", "", "", 32, 30);
+    var settingsNameInput = this._createTextInput("settingsNameInput", "", "", 30, 30);
 
     var settingsDescrLabel = this._createLabel("labelSettingsDescrInput", "", "Description: ", "settingsDescrInput");
     var settingsDescrInput = this._createElement("textArea", "settingsDescrInput");

@@ -72,6 +72,7 @@ function RTIViewer(ptmReference, container) {
   this._sceneMesh = null;
   this._raycaster = null;
   this._internalController = null;
+  this._externalController = null;
 
   this._rendering = false;
 
@@ -160,7 +161,7 @@ RTIViewer.prototype = {
     this._scene.add(this.ptm.renderObject);
     this._initSceneMesh(ptmReference);
 
-    this.setDirectionalLightDirection(new THREE.Vector3(0.0, 0.0, 0.1));
+    this.setDirectionalLightDirection(new THREE.Vector3(0.0, 0.0, 1.0));
     this.setDirectionalLightColor(new THREE.Vector3(  1.5, 1.5, 1.5 ));
     this.setAmbientLightColor(new THREE.Vector3(0.0, 0.0, 0.0));
 
@@ -309,6 +310,9 @@ RTIViewer.prototype = {
     this._lightDir.set(direction.x, direction.y, direction.z);
     this._directionalLight.position.set(direction.x, direction.y, direction.z);
     this._updateH();
+    if (this._externalController) {
+      this._externalController.notifyLightDirChange(direction);
+    }
   },
 
   /**
@@ -377,6 +381,10 @@ RTIViewer.prototype = {
 
   getDomElement: function() {
     return this._renderer.domElement;
+  },
+
+  registerController: function(controller) {
+    this._externalController = controller;
   },
 
   _requestTextures: function() {

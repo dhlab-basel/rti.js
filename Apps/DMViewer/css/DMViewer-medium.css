@@ -1,0 +1,42 @@
+body {
+  debug background-color: green;
+}
+
+input[type="text"] {
+  margin-left: 0px;
+}
+
+button {
+  margin-left: 2px;
+  margin-top: 2px;
+}
+
+#viewerCont {
+  width: 69%;
+  height: 100%
+}
+
+#controlCont {
+  width: 30%;
+  height: 100%;
+}
+
+#lightDirCanvasDiv {
+  padding-top: 5px;
+}
+
+.dialog {
+  margin-left: 2px;
+  padding: 2px;
+  margin: 2px;
+}
+
+.dialog li {
+  padding-right: 2px;
+  margin-bottom: 2px;
+}
+
+.section {
+  asdf margin-top: 2px;
+  margin-bottom: 5px;
+}
