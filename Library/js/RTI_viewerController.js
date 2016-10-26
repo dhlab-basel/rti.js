@@ -29,6 +29,12 @@ function RTIViewerController(viewer) {
   this._lastMousePos = null;
   this._dPinchLast = 0;
 
+  this._orientationControl = false;
+  this._orientationAmplify = false;
+  this._orientationAlpha = null;
+  this._orientationBeta = null;
+  this._orientationGamma = null;
+
   this._init(viewer);
   return this;
 } // RTIViewerController
@@ -66,6 +72,60 @@ RTIViewerController.prototype = {
     this._viewer.getDomElement().addEventListener('touchstart', this.onTouchStart.bind(this) );
     this._viewer.getDomElement().addEventListener('touchmove', this.onTouchMove.bind(this) );
     this._viewer.getDomElement().addEventListener('touchend', this.onTouchEnd.bind(this) );
+
+    if (window.DeviceOrientationEvent == undefined) {
+      this._orientationControl = false;
+      console.log(" no deviceOrientationEvent support");
+    } else {
+      this._orientationControl = true;
+      console.log(" has deviceOrientationEvent support");
+      var bufferSize = 3;
+      this._orientationAlpha = new CircularBuffer(bufferSize);
+      this._orientationBeta = new CircularBuffer(bufferSize);
+      this._orientationGamma = new CircularBuffer(bufferSize);
+      window.addEventListener('deviceorientation', this.onDeviceOrientation.bind(this) );
+    }
+  },
+
+  onDeviceOrientation: function(e) {
+    if (this._orientationControl && window.orientation != null) {
+      this._orientationAlpha.push(e.alpha*Math.PI/180);
+      this._orientationBeta.push(e.beta*Math.PI/180);
+      this._orientationGamma.push(e.gamma*Math.PI/180);
+
+      var lightDir = new THREE.Vector3(0.0, 0.0, 1.0);
+
+      var axisBeta = new THREE.Vector3(0.0, 0.0, 0.0);
+      var axisGamma = new THREE.Vector3(0.0, 0.0, 0.0);
+
+      var orientation = window.orientation;
+      if (orientation == 0.0) {
+        axisBeta.setX(1.0);
+        axisGamma.setY(1.0);
+      } else if (orientation == 90) {
+        axisBeta.setY(1.0);
+        axisGamma.setX(-1.0);
+      } else if (orientation == 180) {
+        axisBeta.setX(-1.0);
+        axisGamma.setY(-1.0);
+      } else if (orientation == -90) {
+        axisBeta.setY(-1.0);
+        axisGamma.setX(1.0);
+      }
+
+      var angleBeta = -this._orientationBeta.getAvg();
+      var angleGamma = -this._orientationGamma.getAvg();
+      if (this._orientationAmplify) {
+        angleGamma = 2*angleGamma;
+        angleBeta = 2*angleBeta;
+      }
+
+      lightDir.applyAxisAngle(axisBeta, angleBeta);
+      lightDir.applyAxisAngle(axisGamma, angleGamma);
+
+      lightDir.normalize();
+      this._viewer.setDirectionalLightDirection(lightDir);
+    }
   },
 
   onResize: function() {
@@ -85,28 +145,13 @@ RTIViewerController.prototype = {
   onMouseDown: function( event_info ) {
     event_info.preventDefault();
     if (event_info.button == 0) {
-      this._isMouseDown = true;
-      this._viewer.getDomElement().focus();
-      var newMousePos = RTIUtils.normalizedMouseCoords(event_info, this._viewer.getDomElement());
-      if (this._mouseMode == 0) { // dragImage mode
-        this._lastMousePos = newMousePos;
-      } else if (this._mouseMode == 1) { // setLightDir mode
-        this.setLightDir(newMousePos);
-      }
+      this._contactPointStart(event_info);
     }
   },
 
   onMouseMove: function( event_info ) {
     event_info.preventDefault();
-    if (this._isMouseDown) {
-      var newMousePos = RTIUtils.normalizedMouseCoords(event_info, this._viewer.getDomElement());
-      if (this._mouseMode == 0) { // dragImage mode
-        this._viewer.dragView(this._lastMousePos, newMousePos);
-        this._lastMousePos = newMousePos;
-      } else if (this._mouseMode == 1) { // setLightDir mode
-        this.setLightDir(newMousePos);
-      }
-    }
+    this._contactPointMove(event_info);
   },
 
   onWheel: function(event_info) {
@@ -119,14 +164,7 @@ RTIViewerController.prototype = {
     event.preventDefault();
     if (event.targetTouches.length == 1) {
       var touch = event.changedTouches[0];
-      this._isMouseDown = true;
-      this._viewer.getDomElement().focus();
-      var newMousePos = RTIUtils.normalizedMouseCoords(touch, this._viewer.getDomElement());
-      if (this._mouseMode == 0) { // dragViewmage mode
-        this._lastMousePos = newMousePos;
-      } else if (this._mouseMode == 1) { // setLightDir mode
-        this.setLightDir(newMousePos);
-      }
+      this._contactPointStart(touch);
     }
   },
 
@@ -135,15 +173,7 @@ RTIViewerController.prototype = {
     if (event.targetTouches.length == 1) {
       var touch = event.changedTouches[0];
       this._isZoomActive = false;
-      if (this._isMouseDown) {
-        var newMousePos = RTIUtils.normalizedMouseCoords(touch, this._viewer.getDomElement());
-        if (this._mouseMode == 0) { // dragImage mode
-          this._viewer.dragView(this._lastMousePos, newMousePos);
-          this._lastMousePos = newMousePos;
-        } else if (this._mouseMode == 1) { // setLightDir mode
-          this.setLightDir(newMousePos);
-        }
-      }
+      this._contactPointMove(touch);
     } else if (event.targetTouches.length == 2) {
       var touch0 = event.changedTouches[0];
       var touch1 = event.changedTouches[1];
@@ -175,6 +205,14 @@ RTIViewerController.prototype = {
     }
   },
 
+  enableOrientationControl: function(enable) {
+    this._orientationControl = enable;
+  },
+
+  enableOrientationAmplify: function(enable) {
+    this._orientationAmplify = enable;
+  },
+
   setLightDir: function(mousePos2d){
     var lightDir = new THREE.Vector3(mousePos2d.x, mousePos2d.y, 0);
 
@@ -185,6 +223,29 @@ RTIViewerController.prototype = {
       lightDir.setZ(0.0);
       lightDir.normalize();
     }
-    this._viewer.setDirectionalLightDirection(lightDir)
+    this._viewer.setDirectionalLightDirection(lightDir);
+  },
+
+  _contactPointStart: function(contactPoint) {
+    this._isMouseDown = true;
+    this._viewer.getDomElement().focus();
+    var newMousePos = RTIUtils.normalizedMouseCoords(contactPoint, this._viewer.getDomElement());
+    if (this._mouseMode == 0) { // dragImage mode
+      this._lastMousePos = newMousePos;
+    } else if (this._mouseMode == 1) { // setLightDir mode
+      this.setLightDir(newMousePos);
+    }
+  },
+
+  _contactPointMove: function(contactPoint) {
+    if (this._isMouseDown) {
+      var newMousePos = RTIUtils.normalizedMouseCoords(contactPoint, this._viewer.getDomElement());
+      if (this._mouseMode == 0) { // dragImage mode
+        this._viewer.dragView(this._lastMousePos, newMousePos);
+        this._lastMousePos = newMousePos;
+      } else if (this._mouseMode == 1) { // setLightDir mode
+        this.setLightDir(newMousePos);
+      }
+    }
   }
 } // RTIViewerController prototype

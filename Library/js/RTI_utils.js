@@ -77,16 +77,16 @@ RTIUtils.intersect = function(lPoint, lDir, pPoint, pNormal) {
 }
 
 /**
- * Caluculates the normalized device coordinates of a mouse position relative to a DOM element.
+ * Caluculates the normalized device coordinates of a mouse/touch position relative to a DOM element.
  *
- * @param {MouseEvent} mouseEvent - the mouseEvent
+ * @param {MouseEvent|Touch} contactPoint - the MouseEvent, or Touch
  * @param {DOMElement} domElement - the DOM element
  * @returns {THREE.Vector2} - mouse pos in normalized device ccordinates
  */
-RTIUtils.normalizedMouseCoords = function(mouseEvent, domElement) {
+RTIUtils.normalizedMouseCoords = function(contactPoint, domElement) {
   var offset = RTIUtils._getOffsetRect(domElement);
-  var normalizedX = ( (mouseEvent.clientX - offset.left) / domElement.clientWidth ) * 2 - 1;
-  var normalizedY = - ( (mouseEvent.clientY - offset.top) / domElement.clientHeight ) * 2 + 1;
+  var normalizedX = ( (contactPoint.clientX - offset.left) / domElement.clientWidth ) * 2 - 1;
+  var normalizedY = - ( (contactPoint.clientY - offset.top) / domElement.clientHeight ) * 2 + 1;
   return new THREE.Vector2(normalizedX, normalizedY);
 }
 
@@ -338,4 +338,61 @@ RTIUtils.parseXMLConfig = function(doc) {
      }
   };
   return config;
+}
+
+function CircularBuffer(size) {
+  this.maxSize = 0;
+  this._currentSize = 0;
+  this._currentIndex = 0;
+  this._values = [];
+  this._init(size);
+  return this;
+}
+
+CircularBuffer.prototype = {
+  _init: function(size) {
+    this.maxSize = size;
+    this._currentSize = 0;
+    this._currentIndex = 0;
+    this._values = new Array(size);
+  },
+
+  push: function(value) {
+    if (this._currentSize < this.maxSize) {
+      this._currentSize++;
+    }
+    this._values[this._currentIndex] = value;
+    this._currentIndex++;
+    this._currentIndex = this._currentIndex%this.maxSize;
+  },
+
+  flush: function() {
+    this._init(this.maxSize);
+  },
+
+  getAvg: function() {
+    if (this._currentSize < 1)
+      return undefined;
+
+    var avg = 0;
+    for (var i = 0; i < this._currentSize; i++) {
+      avg = avg + this._values[i];
+    }
+    avg = avg/this._currentSize;
+    return avg;
+  },
+
+  getVar: function() {
+    if (this._currentSize < 1)
+      return undefined;
+
+    var avg = this.getAvg();
+    var variance = 0;
+    for (var i = 0; i < this._currentSize; i++) {
+      var d = (this._values[i] - avg);
+      variance = variance + d*d;
+    }
+    variance = variance/this._currentSize;
+    return variance;
+  }
 }

@@ -203,6 +203,14 @@ RTIViewer.prototype = {
     this._rendering = false;
   },
 
+  enableOrientationControl: function(enable) {
+    this._internalController.enableOrientationControl(enable);
+  },
+
+  enableOrientationAmplify: function(enable) {
+    this._internalController.enableOrientationAmplify(enable);
+  },
+
 /**
  * Start the animation loop.
  */

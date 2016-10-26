@@ -57,11 +57,13 @@ cp $SCRIPTDIR/shaders/* $DISTDIR/shaders/
 # copy all dependencies to DMViewer project
 DEPLOYDIR=$SCRIPTDIR/../Apps/DMViewer/lib
 mkdir -p $DEPLOYDIR
+rm -rf $DEPLOYDIR/*
 cp -r $DISTDIR/* $DEPLOYDIR/
 
 # copy all dependencies to simpleViewer project
 DEPLOYDIR=$SCRIPTDIR/../Apps/simpleViewer/lib
 mkdir -p $DEPLOYDIR
+rm -rf $DEPLOYDIR/*
 cp -r $DISTDIR/* $DEPLOYDIR/
 
 
