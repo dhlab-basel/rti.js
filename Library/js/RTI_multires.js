@@ -443,7 +443,7 @@ MultiresTree.prototype = {
     if (!success) {
       var urls = "";
       for (var i = 0; i<this._nodes[nodeIndex].numLayers; i++) {
-        var url = this._nodes[nodeIndex].getFullURL(i, this._imgPrefixes, this._multiresStrategy, this._format);
+        var url = this._nodes[nodeIndex].getFullURL(i, this._imgPrefixes, this._multiresStrategyType, this._format);
         urls = urls + url + "\n";
       }
       RTIError("MultiresTree._initialLoadResponse: Unable to load image data for node: "+nodeIndex+", urls:\n"+urls );
