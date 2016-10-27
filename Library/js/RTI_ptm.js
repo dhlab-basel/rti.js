@@ -327,6 +327,12 @@ PTM.prototype = {
           this.biasSpecular = ptmConfig.bias.slice(6,9);
         }
 
+        if (ptmConfig.bias16) {
+          for (var b = 0; b < this.bias.length; b++) {
+            this.bias[b] = this.bias[b]/256;
+          }
+        }
+
         this.orientation = ptmConfig.orientation;
         return true;
   }
