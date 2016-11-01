@@ -136,3 +136,67 @@ vec3 orient2PTM(in vec3 vWorld, in int orientation, in vec2 mirror) {
   vPTM.z = vMirrored.z;
   return vPTM;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+/// Utils ///
+///////////////////////////////////////////////////////////////////////////////
+
+void showErrors(in int debugIndex, in bool normalError, in vec3 NPTM, in vec3 HPTM, in vec3 lDirPTM, in float lum, inout vec3 color) {
+vec3 debugColMagenta = vec3(1.0, 0.0, 1.0);
+vec3 debugColCyan = vec3(0.0, 1.0, 1.0);
+
+//  if (debugIndex == 0) {
+//    if (normalError)
+//      color = debugColMagenta;
+//  } else if (debugIndex == 1) {
+//    if (NPTM.z <= 0.0)
+//      color = debugColMagenta;
+//  } else if (debugIndex == 2) {
+//    if (HPTM.z <= 0.0)
+//      color = debugColMagenta;
+//  } else if (debugIndex == 3) {
+//    if (lDirPTM.z <= 0.0)
+//      color = debugColMagenta;
+//  } else if (debugIndex == 4) {
+//    if (lum.z <= 0.0)
+//      color = debugColMagenta;
+//  } else if (debugIndex == 5) {
+//    if (color.x <= 0.0 || color.y <= 0.0 || color.z <= 0.0)
+//      color = debugColMagenta;
+//  }
+
+  if (debugIndex == 0) {
+    if (normalError)
+      color = debugColMagenta;
+  } else if (debugIndex == 1) {
+    if (NPTM.z <= 0.0) {
+      color = debugColMagenta;
+      if (NPTM.z < 0.0)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 2) {
+    if (HPTM.z <= 0.0) {
+      color = debugColMagenta;
+      if (HPTM.z < 0.0)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 3) {
+    if (lDirPTM.z <= 0.0) {
+      color = debugColMagenta;
+      if (lDirPTM.z < 0.0)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 4) {
+    if (lum <= 0.0) {
+      color = debugColMagenta;
+      if (lum < 0.0)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 5) {
+    if (color.x <= 0.0 || color.y <= 0.0 || color.z <= 0.0) {
+      color = debugColMagenta;
+      if (color.x < 0.0 || color.y < 0.0 || color.z < 0.0)
+        color = debugColCyan;
+    }
+  }
+}

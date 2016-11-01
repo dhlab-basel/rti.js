@@ -42,7 +42,8 @@ uniform vec2 yLimits;
 uniform vec2 mirror;
 uniform int orientation;
 
-uniform int debugMode;
+uniform int visualizeErrors;
+uniform int debugIndex;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// include statements for rti.js glsl preprocessor ///
@@ -73,18 +74,18 @@ void main(void) {
   // evaluate ptm polynomial
   float lum = calcLuminance(aCoeffs, lWeights);
 
-  bool error;
-  vec3 N = calcN(aCoeffs, error);
+  bool normalError;
+  vec3 N = calcN(aCoeffs, normalError);
 
   vec3 HPTM = orient2PTM(H, orientation, mirror);
   float nDotHPTM = dot(N,HPTM);
 
   vec3 diffuseRGB = texture2D(textureRGB, vUv).xyz;
 
-  if(debugMode == 1 && error){
-    color=vec3(0.0,1.0,0.0);
-  }else{
   color = kRGB * (ambientLightCol*diffuseRGB*0.3  + directionalLightCol * lum * (kd*diffuseRGB + flatGSpecular*pow(nDotHPTM,alpha)));
+
+  if(visualizeErrors > 0){
+    showErrors(debugIndex, normalError, N, HPTM, lDirPTM, lum, color);
   }
 
   gl_FragColor = vec4(color, 1.0);
