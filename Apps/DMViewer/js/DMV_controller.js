@@ -112,6 +112,7 @@ DMViewerController.prototype = {
     console.log(" shader " + currentShaderDescr);
 
     this._gui.setDebugMode(this._viewer.ptm.visualizeErrors);
+    this._gui.setDebugIndex(this._viewer.ptm.debugIndex);
   },
 
   /**

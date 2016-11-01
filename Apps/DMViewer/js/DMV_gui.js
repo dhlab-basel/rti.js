@@ -167,6 +167,11 @@ DMViewerGUI.prototype = {
     }
   },
 
+  setDebugIndex: function(index) {
+    var radioButton = document.getElementById("debugIndex"+index);
+    radioButton.checked = true;
+  },
+
   /**
    * Updates the internal list of available viewer settings names.
    *
