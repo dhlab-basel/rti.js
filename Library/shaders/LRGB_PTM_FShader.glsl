@@ -74,18 +74,24 @@ void main(void) {
   // evaluate ptm polynomial
   float lum = calcLuminance(aCoeffs, lWeights);
 
-  bool normalError;
-  vec3 N = calcN(aCoeffs, normalError);
+  bool maxDirError;
+  vec3 N = calcN(aCoeffs, 0.0, maxDirError);
 
   vec3 HPTM = orient2PTM(H, orientation, mirror);
   float nDotHPTM = dot(N,HPTM);
 
   vec3 diffuseRGB = texture2D(textureRGB, vUv).xyz;
 
+  vec3 Ndebug = N;
+  if (N.z <= 0.0) {
+    N = vec3(0.0, 0.0, 1.0);
+    nDotHPTM = dot(N,HPTM);
+  }
+
   color = kRGB * (ambientLightCol*diffuseRGB*0.3  + directionalLightCol * lum * (kd*diffuseRGB + flatGSpecular*pow(nDotHPTM,alpha)));
 
   if(visualizeErrors > 0){
-    showErrors(debugIndex, normalError, N, HPTM, lDirPTM, lum, color);
+    showErrors(debugIndex, maxDirError, Ndebug, HPTM, lDirPTM, lum, color);
   }
 
   gl_FragColor = vec4(color, 1.0);
