@@ -82,6 +82,12 @@ void main(void) {
 
   vec3 diffuseRGB = texture2D(textureRGB, vUv).xyz;
 
+  bool lumError = false;
+  if (lum < 0.0) {
+    lum = 0.0;
+    lumError = true;
+  }
+
   vec3 Ndebug = N;
   if (N.z <= 0.0) {
     N = vec3(0.0, 0.0, 1.0);
@@ -91,7 +97,7 @@ void main(void) {
   color = kRGB * (ambientLightCol*diffuseRGB*0.3  + directionalLightCol * lum * (kd*diffuseRGB + flatGSpecular*pow(nDotHPTM,alpha)));
 
   if(visualizeErrors > 0){
-    showErrors(debugIndex, maxDirError, Ndebug, HPTM, lDirPTM, lum, color);
+    showErrors(debugIndex, maxDirError, Ndebug, HPTM, lDirPTM, lumError, lum, color);
   }
 
   gl_FragColor = vec4(color, 1.0);

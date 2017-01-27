@@ -143,7 +143,7 @@ vec3 orient2PTM(in vec3 vWorld, in int orientation, in vec2 mirror) {
 /// Utils ///
 ///////////////////////////////////////////////////////////////////////////////
 
-void showErrors(in int debugIndex, in bool normalError, in vec3 NPTM, in vec3 HPTM, in vec3 lDirPTM, in float lum, inout vec3 color) {
+void showErrors(in int debugIndex, in bool normalError, in vec3 NPTM, in vec3 HPTM, in vec3 lDirPTM, in bool lumError, in float lum, inout vec3 color) {
   vec3 debugColMagenta = vec3(1.0, 0.0, 1.0);
   vec3 debugColCyan = vec3(0.0, 1.0, 1.0);
 
@@ -171,7 +171,7 @@ void showErrors(in int debugIndex, in bool normalError, in vec3 NPTM, in vec3 HP
   } else if (debugIndex == 4) {
     if (lum <= 0.0) {
       color = debugColMagenta;
-      if (lum < 0.0)
+      if (lumError)
         color = debugColCyan;
     }
   } else if (debugIndex == 5) {
