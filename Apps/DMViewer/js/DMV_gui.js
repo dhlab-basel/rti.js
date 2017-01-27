@@ -63,8 +63,8 @@ DMViewerGUI.prototype = {
     this._createMainSettingsControls(container, availablePTMs, availableShaders);
     this._createLightColorControls(container, false, false);
     this._createPTMParamControls(container);
-    this._createRadioForm(container, "Channel used for parameter 'g':", "gChannel", [ "1", "2", "3" ], !DMV_SHOW_ADVANCED_CONTROLS);
-    this._createRadioForm(container, "Applied rotation (CCW):", "orientation", [ "0", "90", "180", "270" ], !DMV_SHOW_ADVANCED_CONTROLS);
+    this._createGChannelControls(container, !DMV_SHOW_ADVANCED_CONTROLS);
+    this._createOrientationControls(container, !DMV_SHOW_ADVANCED_CONTROLS);
     this._createDebugElements(container, !DMV_SHOW_ADVANCED_CONTROLS);
     this._createLogoSection(container);
 
@@ -123,7 +123,7 @@ DMViewerGUI.prototype = {
     document.getElementById("saveSettingsButton").onclick = this._onSaveSettingsEvent.bind(this);
     document.getElementById("resetSettingsButton").onclick = this._onResetSettingsEvent.bind(this);
 
-    document.getElementById('debugModeButton').onclick = this._onToggleDebugModeEvent.bind(this);
+    document.getElementById("toggleVisualizeErrors").onclick = this._onToggleDebugModeEvent.bind(this);
 
     var radioInputs = this._getRadioInputs("orientation");
     for (var i=0; i<radioInputs.length; i++) {
@@ -133,6 +133,11 @@ DMViewerGUI.prototype = {
     radioInputs = this._getRadioInputs("gChannel");
     for (var i=0; i<radioInputs.length; i++) {
       radioInputs[i].onclick = this._onExclusiveChoiceChangeEvent.bind(this, "gChannel", i);
+    }
+
+    radioInputs = this._getRadioInputs("debugIndex");
+    for (var i=0; i<radioInputs.length; i++) {
+      radioInputs[i].onclick = this._onExclusiveChoiceChangeEvent.bind(this, "debugIndex", i);
     }
 
     document.getElementById('kRGBControlsButton').onclick = this._onToggleShowButtonEvent.bind(this, "kRGB");
@@ -152,11 +157,19 @@ DMViewerGUI.prototype = {
    * @param {int} mode - 0 for OFF, all other values for ON
    */
   setDebugMode: function(mode) {
+    var toggle = document.getElementById("toggleVisualizeErrors");
     if (mode == 0) {
-      document.getElementById('debugModeButton').classList.remove("switchButtonOn");
+      toggle.checked = false;
+      toggle.value = "off";
     } else {
-      document.getElementById('debugModeButton').classList.add("switchButtonOn");
+      toggle.checked = true;
+      toggle.value = "on";
     }
+  },
+
+  setDebugIndex: function(index) {
+    var radioButton = document.getElementById("debugIndex"+index);
+    radioButton.checked = true;
   },
 
   /**
@@ -286,11 +299,13 @@ DMViewerGUI.prototype = {
     if (show) {
       document.getElementById("divKs").classList.remove("hide");
       // document.getElementById("divAlpha").classList.remove("hide");
-      document.getElementById("divgChannel").classList.remove("hide");
+      // document.getElementById("divgChannel").classList.remove("hide");
+      document.getElementById("gChannelDiv").classList.remove("hide");
     } else {
       document.getElementById("divKs").classList.add("hide");
       // document.getElementById("divAlpha").classList.add("hide");
-      document.getElementById("divgChannel").classList.add("hide");
+      // document.getElementById("divgChannel").classList.add("hide");
+      document.getElementById("gChannelDiv").classList.add("hide");
     }
   },
 
@@ -413,6 +428,14 @@ DMViewerGUI.prototype = {
       this.controller.onRotationChange(index);
     else if (parameterId == "gChannel")
       this.controller.onGChannelChange(index);
+    else if (parameterId == "debugIndex") {
+      this.controller.onDebugIndexChange(index);
+      if (index > 0) {
+        document.getElementById("belowZeroMessageDiv").classList.remove("noDisplay")
+      } else {
+        document.getElementById("belowZeroMessageDiv").classList.add("noDisplay")
+      }
+    }
   },
 
   _onPTMSelectionEvent: function() {
@@ -830,17 +853,44 @@ DMViewerGUI.prototype = {
     return saveDialogDiv;
   },
 
-  _createDebugElements: function(container, hidden) {
-    var div = this._createElement("div", "", "section");
-    var labelDiv = document.createElement("div");
-    labelDiv.appendChild(document.createTextNode("Shader debug flag:"));
-    div.appendChild(labelDiv);
-
-    var button = this._createButton("debugModeButton", "", "Debug");
-    div.appendChild(button);
+  _createGChannelControls: function(container, hidden) {
+    var div = this._createElement("div", "gChannelDiv", "section");
+    this._createRadioForm(div, "Channel used for parameter 'g':", "gChannel", [ "1", "2", "3" ], false);
+    div.appendChild(this._createElement("hr", "gChannelBottomSeparator", "bottomSeparator"));
     if (hidden)
       div.classList.add("noDisplay");
+    container.appendChild(div);
+  },
+
+  _createOrientationControls: function(container, hidden) {
+    var div = this._createElement("div", "orientationDiv", "section");
+    this._createRadioForm(div, "Applied rotation (CCW):", "orientation", [ "0", "90", "180", "270" ], false);
+    div.appendChild(this._createElement("hr", "orientationBottomSeparator", "bottomSeparator"));
+    if (hidden)
+      div.classList.add("noDisplay");
+    container.appendChild(div);
+  },
+
+  _createDebugElements: function(container, hidden) {
+    var div = this._createElement("div", "", "section");
+    var toggle = this._createInput("checkbox", "toggleVisualizeErrors", "", "off");
+    toggle.name = "toggleVisualizeErrors";
+    toggle.checked = false;
+    div.appendChild(toggle);
+    div.appendChild(document.createTextNode("Visualize shader errors:"));
+
+    this._createRadioForm(div, "", "debugIndex",
+                          [ "error in calcN()", "N.z <= 0", "H.z <= 0", "lDir.z <= 0", "lum <= 0", "color <= 0" ],
+                           false);
+    var infoDiv = this._createElement("div", "belowZeroMessageDiv", "");
+    infoDiv.appendChild(document.createTextNode("Magenta: value == 0.0"));
+    infoDiv.appendChild(this._createElement("br"));
+    infoDiv.appendChild(document.createTextNode("Cyan: value  < 0.0"));
+    infoDiv.classList.add("noDisplay");
+    div.appendChild(infoDiv);
     div.appendChild(this._createElement("hr", "debugElementsBottomSeparator", "bottomSeparator"));
+    if (hidden)
+      div.classList.add("noDisplay");
     container.appendChild(div);
   },
 

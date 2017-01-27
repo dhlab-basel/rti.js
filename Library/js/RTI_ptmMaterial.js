@@ -45,7 +45,8 @@ function PTMMaterial(ptm, textures, contentLimitsX, contentLimitsY) {
         scale: {type: 'fv1', value: ptm.scale},
         bias: {type: 'fv1', value: ptm.bias},
 
-        debugMode: {type: 'i', value: ptm.debugMode},
+        visualizeErrors: {type: 'i', value: ptm.visualizeErrors},
+        debugIndex: {type: 'i', value: ptm.debugIndex},
         kRGB: {type: 'v3', value: ptm.kRGB},
         kd: {type: 'f', value: ptm.kd},
         alpha: {type: 'f', value: ptm.alpha},

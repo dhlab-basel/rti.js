@@ -34,7 +34,8 @@
  * @property {float} biasSpecular - bias LRGBG coefficients.
  * @property {int} orientation - index rotation PTM display vs capturing.
  * @property {THREE.Vector2} mirror - index mirror PTM display vs capturing.
- * @property {int} debugMode - flag debugMode shader.
+ * @property {int} visualizeErrors - flag debugMode shader.
+ * @property {int} debugIndex - index debugMode shader.
  *
  */
 function PTM(ptmReference) {
@@ -50,7 +51,8 @@ function PTM(ptmReference) {
   this.biasSpecular = [];
   this.orientation = 0;
   this.mirror = null;
-  this.debugMode = 0;
+  this.visualizeErrors = 0;
+  this.debugIndex = 0;
 
   this._ptmType = "";
   this._geometryType = "";
@@ -97,7 +99,8 @@ PTM.prototype = {
 
     this._multiresTree = new MultiresTree(config, ptmReference.imgURLPrefixes, this, 7.5); // MAGIC_VALUE
 
-    this.debugMode = 0;
+    this.visualizeErrors = 0;
+    this.debugIndex = 0;
     this.kRGB = new THREE.Vector3( 1, 1, 1 );
     this.kd = 0.4;
     this.ks = 0.0;
@@ -145,7 +148,8 @@ PTM.prototype = {
   renderUpdate: function(lDir, H, directionalLightCol, ambientLightCol){
     for (var t = 0; t< this._activeTiles.length; t++){
         if (!this._activeTiles[t].loadError && this._activeTiles[t].hasContent) {
-        this._activeTiles[t].material.uniforms.debugMode.value = this.debugMode;
+        this._activeTiles[t].material.uniforms.visualizeErrors.value = this.visualizeErrors;
+        this._activeTiles[t].material.uniforms.debugIndex.value = this.debugIndex;
         this._activeTiles[t].material.uniforms.kRGB.value = this.kRGB;
         this._activeTiles[t].material.uniforms.kd.value = this.kd;
         this._activeTiles[t].material.uniforms.alpha.value = this.alpha;
@@ -325,6 +329,12 @@ PTM.prototype = {
         if (this._ptmType == "LRGBG_PTM") {
           this.scaleSpecular = ptmConfig.scale.slice(6,9);
           this.biasSpecular = ptmConfig.bias.slice(6,9);
+        }
+
+        if (ptmConfig.bias16) {
+          for (var b = 0; b < this.bias.length; b++) {
+            this.bias[b] = this.bias[b]/256;
+          }
         }
 
         this.orientation = ptmConfig.orientation;

@@ -135,11 +135,6 @@ ul {
   height: 32px;
 }
 
-.switchButtonOn {
-  background-color: #09ff00;
-  color: #000000;
-}
-
 .inactive {
   color: #666666;
 }

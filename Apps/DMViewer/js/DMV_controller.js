@@ -111,7 +111,8 @@ DMViewerController.prototype = {
     this._gui.setShader(currentShaderDescr);
     console.log(" shader " + currentShaderDescr);
 
-    this._gui.setDebugMode(this._viewer.ptm.debugMode);
+    this._gui.setDebugMode(this._viewer.ptm.visualizeErrors);
+    this._gui.setDebugIndex(this._viewer.ptm.debugIndex);
   },
 
   /**
@@ -237,12 +238,16 @@ DMViewerController.prototype = {
    * <p>Will toggle the debug mode and update the gui accordingly.</p>
    */
   onDebugToggle: function(){
-    if(this._viewer.ptm.debugMode == 0) {
-      this._viewer.ptm.debugMode  = 1;
+    if(this._viewer.ptm.visualizeErrors == 0) {
+      this._viewer.ptm.visualizeErrors  = 1;
     } else {
-      this._viewer.ptm.debugMode  = 0;
+      this._viewer.ptm.visualizeErrors  = 0;
     }
-    this._gui.setDebugMode(this._viewer.ptm.debugMode);
+    this._gui.setDebugMode(this._viewer.ptm.visualizeErrors);
+  },
+
+  onDebugIndexChange: function(debugIndex){
+    this._viewer.ptm.debugIndex  = debugIndex;
   },
 
   onEnableOrientationControl: function(enable) {
