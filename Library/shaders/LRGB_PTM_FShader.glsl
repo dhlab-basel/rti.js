@@ -94,7 +94,12 @@ void main(void) {
     nDotHPTM = dot(N,HPTM);
   }
 
-  color = kRGB * (ambientLightCol*diffuseRGB*0.3  + directionalLightCol * lum * (kd*diffuseRGB + flatGSpecular*pow(max(nDotHPTM,0.0),alpha)));
+  if (lDirPTM.z < 0.0) {
+  //  if (dot(lDirPTM,N) < 0.0) {
+    color = kRGB * ambientLightCol*diffuseRGB*0.3;
+  } else {
+    color = kRGB * (ambientLightCol*diffuseRGB*0.3  + directionalLightCol * lum * (kd*diffuseRGB + flatGSpecular*pow(max(nDotHPTM,0.0),alpha)));
+  }
 
   if(visualizeErrors > 0){
     showErrors(debugIndex, maxDirError, Ndebug, HPTM, lDirPTM, lumError, lum, color);
