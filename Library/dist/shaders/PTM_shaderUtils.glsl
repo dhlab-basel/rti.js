@@ -17,52 +17,54 @@
 /// PTM evaluation functions. All vectors assumed to be in PTM coord system ///
 ///////////////////////////////////////////////////////////////////////////////
 
-//void calcN(in float a[6], out vec3 N, out bool error) {
-vec3 calcN(in float a[6], out bool error) {
-  // see ptm.pdf (Polynomial Texture Maps, Tom Malzbender et al.). Equations 16,17 and 18
+vec3 calcMaxDir(in float a[6], out bool error) {
+  // see Polynomial Texture Maps, Tom Malzbender et al., Equations 16,17 and 18
+  // and Realistic Visualisation of Cultural Heritage Objects, Lindsay MacDonald), Sections 4.3.2 and 4.4.5
   float zerotol = 0.000000001;
 
   error=false;
 
-  vec3 N;
+  vec3 maxDir;
   float denominator = 4.0*a[0]*a[1] - a[2]*a[2];
   if (abs(denominator) < zerotol) {
-    N = vec3(0.0, 0.0, 1.0);
-    error=true;
-  } else if(abs(a[0])<zerotol && abs(a[1])<zerotol && abs(a[2])<zerotol && abs(a[3])<zerotol && abs(a[4])<zerotol ){
-    N = vec3(0.0, 0.0, 1.0);
-    error=true;
+    maxDir = vec3(0.0, 0.0, 1.0);
+    error = true;
   } else {
-    float lu0=0.0;
-    float lv0=0.0;
-    //Speed up the computation and minimize the errors
-    if(abs(a[2])<zerotol){
-        lu0 = -a[3]/(2.0*a[0]);
-        lv0 = -a[4]/(2.0*a[1]);
-    }else{
-        lu0 = (a[2]*a[4] - 2.0*a[1]*a[3])/denominator;
-        lv0 = (a[2]*a[3] - 2.0*a[0]*a[4])/denominator;
-    }
+    float lu0 = (a[2]*a[4] - 2.0*a[1]*a[3])/denominator;
+    float lv0 = (a[2]*a[3] - 2.0*a[0]*a[4])/denominator;
     float sumSquares = lu0*lu0 + lv0*lv0;
     float squareRoot = 0.0;
-    if (sumSquares < 0.0) {
-      N = vec3(0.0, 0.0, 1.0);
-      error=true;
-    } else if(sumSquares>1.0){
-        sumSquares=sqrt(sumSquares);
-        //has to be > 0
-        if(sumSquares>zerotol){
-            lu0 = lu0/sumSquares;
-            lv0 = lv0/sumSquares;
-        }else{
-            N = vec3(0.0, 0.0, 1);
-            error=true;
-        }
-    }else {
+    if (sumSquares > 1.0){
+      squareRoot = sqrt(sumSquares);
+      lu0 = lu0/squareRoot;
+      lv0 = lv0/squareRoot;
+      maxDir = vec3(lu0, lv0, 0.0);
+      error = true;
+    } else {
       squareRoot = sqrt(1.0 - sumSquares);
-      N = vec3(lu0, lv0, squareRoot);
+      maxDir = vec3(lu0, lv0, squareRoot);
     }
-    N = normalize(N);
+  }
+  return maxDir;
+}
+
+vec3 calcN(in float a[6], in float glossFactor, out bool error) {
+  // see Realistic Visualisation of Cultural Heritage Objects, Lindsay MacDonald), Sections 4.3.2 and 4.4.5
+  float zerotol = 0.000000001;
+  vec3 maxDir = calcMaxDir(a, error);
+
+  vec3 N;
+  if (glossFactor > zerotol) {
+    #ifdef POLAR_NORMAL
+      float thetaN = acos(sqrt(1.0 - maxDir.x*maxDir.x - maxDir.y*maxDir.y)) / 2.0;
+      float phiN = atan(maxDir.y, maxDir.x);
+      N = vec3(cos(phiN)*sin(thetaN), sin(phiN)*sin(thetaN), cos(thetaN));
+    #else
+      N = vec3(maxDir.x, maxDir.y, maxDir.z + 1.0);
+      N = normalize(N);
+    #endif
+  } else {
+    N = maxDir;
   }
   return N;
 }
@@ -135,4 +137,48 @@ vec3 orient2PTM(in vec3 vWorld, in int orientation, in vec2 mirror) {
   }
   vPTM.z = vMirrored.z;
   return vPTM;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// Utils ///
+///////////////////////////////////////////////////////////////////////////////
+
+void showErrors(in int debugIndex, in bool normalError, in vec3 NPTM, in vec3 HPTM, in vec3 lDirPTM, in bool lumError, in float lum, inout vec3 color) {
+  vec3 debugColMagenta = vec3(1.0, 0.0, 1.0);
+  vec3 debugColCyan = vec3(0.0, 1.0, 1.0);
+
+  if (debugIndex == 0) {
+    if (normalError)
+      color = debugColMagenta;
+  } else if (debugIndex == 1) {
+    if (NPTM.z <= 0.0) {
+      color = debugColMagenta;
+      if (NPTM.z < 0.0)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 2) {
+    if (HPTM.z <= 0.0) {
+      color = debugColMagenta;
+      if (HPTM.z < 0.0)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 3) {
+    if (lDirPTM.z <= 0.0) {
+      color = debugColMagenta;
+      if (lDirPTM.z < 0.0)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 4) {
+    if (lum <= 0.0) {
+      color = debugColMagenta;
+      if (lumError)
+        color = debugColCyan;
+    }
+  } else if (debugIndex == 5) {
+    if (color.x <= 0.0 || color.y <= 0.0 || color.z <= 0.0) {
+      color = debugColMagenta;
+      if (color.x < 0.0 || color.y < 0.0 || color.z < 0.0)
+        color = debugColCyan;
+    }
+  }
 }
